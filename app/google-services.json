@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167515141440",
+    "project_id": "eurotravel-471ba",
+    "storage_bucket": "eurotravel-471ba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167515141440:android:4c5dc8fdde04614c3fb6a5",
+        "android_client_info": {
+          "package_name": "yenly.edu.eurotravel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl_HA8uGAv0ish8Q-prnZIm7nxeaAnPRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
