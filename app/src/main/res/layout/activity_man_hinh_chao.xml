@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/anh_nen"
+        android:scaleType="centerCrop" /> <View
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A237E"> <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:background="#26000000" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Du Lịch Châu Âu"
-        android:textColor="#FFFFFF"
-        android:textSize="38sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-condensed" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="220dp" android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="30dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Khám phá vẻ đẹp Châu Âu"
-        android:textColor="#B0BEC5"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-medium" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EUROTRAVEL"
+            android:textColor="#FFFFFF"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.05" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Khám phá vẻ đẹp Châu Âu"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </RelativeLayout>
