@@ -1,26 +1,31 @@
 package yenly.edu.eurotravel.activity;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import yenly.edu.eurotravel.R;
 
 public class DangNhapActivity extends AppCompatActivity {
+    private EditText edtEmailDangNhap, edtMatKhauDangNhap;
+    private Button btnNutDangNhap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dang_nhap);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        AnhXa();
+        btnNutDangNhap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Chỗ này sau này mình sẽ viết code kết nối Firebase Auth nhé Ly
+            }
         });
+    }
+    private void AnhXa() {
+        edtEmailDangNhap = findViewById(R.id.edtEmailDN);
+        edtMatKhauDangNhap = findViewById(R.id.edtMatKhauDN);
+        btnNutDangNhap = findViewById(R.id.btnNutDangNhap);
     }
 }

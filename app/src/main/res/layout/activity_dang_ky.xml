@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ĐĂNG NHẬP"
+        android:text="ĐĂNG KÝ"
         android:textColor="#212121"
         android:textStyle="bold"
         android:textSize="22sp"
@@ -17,20 +17,40 @@
         android:layout_marginTop="80dp"/>
 
     <EditText
-        android:id="@+id/edtEmailDN"
+        android:id="@+id/edtTenNguoiDung"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập Email của bạn"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="60dp"
+        android:hint="Nhập tên người dùng"
+        android:inputType="textPersonName"
+        android:layout_marginTop="50dp"
         android:textSize="16sp"
         android:paddingBottom="12dp" />
 
     <EditText
-        android:id="@+id/edtMatKhauDN"
+        android:id="@+id/edtEmailDK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập Email của bạn"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:paddingBottom="12dp" />
+
+    <EditText
+        android:id="@+id/edtMatKhauDK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nhập mật khẩu"
+        android:inputType="textPassword"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:paddingBottom="12dp" />
+
+    <EditText
+        android:id="@+id/edtXacNhanMK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập lại mật khẩu"
         android:inputType="textPassword"
         android:layout_marginTop="20dp"
         android:textSize="16sp"
@@ -42,11 +62,11 @@
         android:layout_weight="1"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnNutDangNhap"
+        android:id="@+id/btnNutDangKy"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@drawable/bo_goc_nut_vang"
-        android:text="XÁC NHẬN ĐĂNG NHẬP"
+        android:text="XÁC NHẬN ĐĂNG KÝ"
         android:textColor="#212121"
         android:textSize="16sp"
         android:textStyle="bold"

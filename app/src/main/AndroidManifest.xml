@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EuroTravel">
         <activity
+            android:name=".activity.DangKyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.LuaChonActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.DangNhapActivity"
             android:exported="false" />
         <activity
