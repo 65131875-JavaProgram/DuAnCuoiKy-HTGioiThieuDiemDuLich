@@ -19,7 +19,6 @@ public class DangNhapActivity extends AppCompatActivity {
         btnNutDangNhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Chỗ này sau này mình sẽ viết code kết nối Firebase Auth nhé Ly
             }
         });
     }
