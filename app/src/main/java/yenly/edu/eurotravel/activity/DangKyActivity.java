@@ -1,32 +1,30 @@
 package yenly.edu.eurotravel.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
 import yenly.edu.eurotravel.R;
-import yenly.edu.eurotravel.NguoiDung;
 
 public class DangKyActivity extends AppCompatActivity {
     private EditText edtTenNguoiDung, edtEmailDK, edtMatKhauDK, edtXacNhanMK;
     private Button btnNutDangKy;
-
     private FirebaseAuth mAuth;
 
     @Override
@@ -72,27 +70,34 @@ public class DangKyActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String userId = task.getResult().getUser().getUid();
-                            NguoiDung nguoiDung = new NguoiDung(ten, email);
 
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance("https://eurotravel-471ba-default-rtdb.firebaseio.com");
                             DatabaseReference databaseReference = database.getReference("USERS");
 
-                            HashMap<String, Object> item = new HashMap<>();
-                            item.put(userId, nguoiDung.toFirebaseObject());
+                            HashMap<String, Object> userMap = new HashMap<>();
+                            userMap.put("tenNguoiDung", ten);
+                            userMap.put("email", email);
 
-                            databaseReference.updateChildren(item, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                    if (error == null) {
-                                        Toast.makeText(DangKyActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    } else {
-                                        Toast.makeText(DangKyActivity.this, "Lỗi lưu dữ liệu: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                            databaseReference.child(userId).setValue(userMap)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> taskDb) {
+                                            if (taskDb.isSuccessful()) {
+                                                Toast.makeText(DangKyActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(DangKyActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+
+// Dán 3 dòng này vào đây nha Ly:
+                                                Intent intent = new Intent(DangKyActivity.this, DangNhapActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                                finish();
+                                            } else {
+                                                Toast.makeText(DangKyActivity.this, "Lỗi lưu Database: " + taskDb.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
                         } else {
-                            Toast.makeText(DangKyActivity.this, "Lỗi: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(DangKyActivity.this, "Lỗi tạo tài khoản: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
