@@ -77,8 +77,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignBottom="@id/txtTenDiaDiem"
                     android:text="$1500"
-                    android:textColor="#4CAF50"
-                    android:textSize="22sp"
+                    android:textColor="@android:color/white" android:textSize="22sp"
                     android:textStyle="bold" />
             </RelativeLayout>
 
