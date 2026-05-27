@@ -23,6 +23,7 @@ public class ChiTietActivity extends AppCompatActivity {
     private LinearLayout btnTabOverview;
     private TextView txtTabOverview, txtTabPhotos, txtTabDetails, txtTabReviews;
     private View indicatorOverview;
+    private LinearLayout layoutOverviewContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class ChiTietActivity extends AppCompatActivity {
         txtTabDetails = findViewById(R.id.txtTabDetails);
         txtTabReviews = findViewById(R.id.txtTabReviews);
         indicatorOverview = findViewById(R.id.indicatorOverview);
+        layoutOverviewContent = findViewById(R.id.layoutOverviewContent);
 
         if (getIntent().hasExtra("du_lieu_chuyen_di")) {
             ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
@@ -83,9 +85,10 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtTabDetails.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
                 txtTabReviews.setTypeface(null, android.graphics.Typeface.NORMAL);
                 txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
-                txtMoTaChiTiet.setVisibility(View.VISIBLE);
+                layoutOverviewContent.setVisibility(View.VISIBLE);
             }
         });
+
         txtTabPhotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
