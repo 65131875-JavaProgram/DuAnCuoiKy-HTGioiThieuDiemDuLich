@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="220dp"
     android:layout_margin="10dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="4dp">
+    app:cardElevation="6dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,12 +17,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/anh_nen" />
+            android:src="@drawable/paris" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#33000000"/>
+            android:background="#4D000000"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="12dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@android:drawable/star_on"
+                app:tint="#FFD700"/>
+
+            <TextView
+                android:id="@+id/txtRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="5.0"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,22 +57,68 @@
             android:layout_margin="16dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtTenDiaDiem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Croatia"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/txtThoiGian"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/txtTenDiaDiem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paris"
+                    android:textColor="@android:color/white"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@id/txtTenDiaDiem"
+                    android:text="$1500"
+                    android:textColor="#4CAF50"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Summer 2017 - 14 days"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@android:drawable/ic_menu_mapmode"
+                    app:tint="@android:color/white"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/txtQuocGia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="Pháp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" • "
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/txtThoiGian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7 Days"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
