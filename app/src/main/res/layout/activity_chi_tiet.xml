@@ -1,270 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@android:color/white">
 
-    <ImageView
-        android:id="@+id/imgChiTiet"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/anh_nen" />
+        android:layout_height="350dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_tron_trang"
-            android:src="@android:drawable/ic_menu_revert"
-            app:tint="#000000" />
+            <ImageView
+                android:id="@+id/imgChiTiet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/paris"
+                app:layout_collapseMode="parallax" />
 
-        <ImageButton
-            android:id="@+id/btnMore"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/bg_tron_trang"
-            android:src="@android:drawable/ic_menu_share"
-            app:tint="#000000" />
-    </RelativeLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin">
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="#4D000000"
+                    android:src="@android:drawable/ic_menu_revert"
+                    app:tint="@android:color/white"/>
+            </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btnSelectDays"
-        android:scrollbars="none">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_height="wrap_content">
 
-            <View
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:background="@android:color/transparent" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtTenChiTiet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paris, France"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="#121931"/>
+
+                <TextView
+                    android:id="@+id/txtGiaChiTiet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="$1500"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#4CAF50"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_noi_dung_bo_goc"
-                android:orientation="vertical"
-                android:padding="24dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
+                <RatingBar
+                    android:id="@+id/ratingBarHienThi"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <RatingBar
-                        android:id="@+id/ratingBarHienThi"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:rating="5"
-                        android:progressTint="#FFC107" />
-
-                    <TextView
-                        android:id="@+id/txtSoSaoNhanXet"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:text="5.0 (147 reviews)"
-                        android:textColor="#8A8A8A"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@id/layoutGiaTien"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txtTenChiTiet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tên địa điểm"
-                            android:textColor="#000000"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtPhanLoai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="🇪🇺 Europe Destination"
-                            android:textColor="#A3A3A3"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layoutGiaTien"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:gravity="end"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txtGiaChiTiet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$0"
-                            android:textColor="#2F58CD"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Per person"
-                            android:textColor="#A3A3A3"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
-
-                    <ImageButton
-                        android:id="@+id/btnFavorite"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/bg_tron_trang_do_bong"
-                        android:elevation="4dp"
-                        android:src="@android:drawable/btn_star_big_off" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Overview"
-                        android:textColor="#121931"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="24dp"
-                        android:text="Photos"
-                        android:textColor="#A3A3A3"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="24dp"
-                        android:text="Details"
-                        android:textColor="#A3A3A3"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="24dp"
-                        android:text="Reviews"
-                        android:textColor="#A3A3A3"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
+                    android:numStars="5"
+                    android:rating="4.5"
+                    android:progressTint="#FFD700"/>
                 <TextView
-                    android:id="@+id/txtMoTaChiTiet"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtSoSaoNhanXet"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:lineSpacingExtra="6dp"
-                    android:text="Nội dung mô tả chi tiết chuyến đi sẽ hiển thị ở đây..."
-                    android:textColor="#4A4A4A"
-                    android:textSize="15sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="#F8F9FA"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rate your trip:"
-                        android:textColor="#121931"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp">
-
-                        <RatingBar
-                            android:id="@+id/ratingBarKhachHang"
-                            style="?android:attr/ratingBarStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:numStars="5"
-                            android:stepSize="1" />
-
-                        <Button
-                            android:id="@+id/btnGuiDanhGia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:backgroundTint="#4CAF50"
-                            android:text="Submit"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp" />
-
+                    android:layout_marginLeft="8dp"
+                    android:text="(4.5) - 120 reviews"
+                    android:textColor="#8E8E8E"/>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Mô tả chuyến đi"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#121931"/>
+
+            <TextView
+                android:id="@+id/txtMoTaChiTiet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="5dp"
+                android:text="Nội dung mô tả sẽ hiện ở đây..."
+                android:textSize="16sp"
+                android:textColor="#4E4E4E"/>
+
+            <Button
+                android:id="@+id/btnFavorite"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="#FF5252"
+                android:text="Thêm vào yêu thích ❤️"
+                android:textColor="@android:color/white"
+                app:cornerRadius="15dp" />
+
         </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/btnSelectDays"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:backgroundTint="#222842"
-        android:text="Select Days"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:cornerRadius="14dp" />
-
-</RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
