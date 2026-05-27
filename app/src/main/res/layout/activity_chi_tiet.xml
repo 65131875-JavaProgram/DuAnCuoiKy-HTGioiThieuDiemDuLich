@@ -130,13 +130,16 @@
                         android:layout_marginTop="30dp"
                         android:layout_marginBottom="20dp"
                         android:weightSum="4">
+
                         <LinearLayout
+                            android:id="@+id/btnTabOverview"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:gravity="center">
                             <TextView
+                                android:id="@+id/txtTabOverview"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Overview"
@@ -144,35 +147,48 @@
                                 android:textColor="#1E2333"
                                 android:textSize="14sp"/>
                             <View
+                                android:id="@+id/indicatorOverview"
                                 android:layout_width="5dp"
                                 android:layout_height="5dp"
                                 android:layout_marginTop="4dp"
                                 android:background="#1E2333" />
                         </LinearLayout>
+
                         <TextView
+                            android:id="@+id/txtTabPhotos"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Photos"
                             android:gravity="center"
                             android:textColor="#A0A0A0"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            android:clickable="true"
+                            android:focusable="true"/>
+
                         <TextView
+                            android:id="@+id/txtTabDetails"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Details"
                             android:gravity="center"
                             android:textColor="#A0A0A0"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            android:clickable="true"
+                            android:focusable="true"/>
+
                         <TextView
+                            android:id="@+id/txtTabReviews"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Reviews"
                             android:gravity="center"
                             android:textColor="#A0A0A0"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            android:clickable="true"
+                            android:focusable="true"/>
                     </LinearLayout>
 
                     <TextView

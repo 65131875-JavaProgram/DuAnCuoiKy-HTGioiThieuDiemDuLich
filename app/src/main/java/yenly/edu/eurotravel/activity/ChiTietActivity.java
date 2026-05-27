@@ -1,8 +1,10 @@
 package yenly.edu.eurotravel.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,9 @@ public class ChiTietActivity extends AppCompatActivity {
     private TextView txtTenChiTiet, txtGiaChiTiet, txtQuocGiaChiTiet, txtMoTaChiTiet, txtSoSaoNhanXet;
     private RatingBar ratingBarHienThi;
     private Button btnSelectDays;
+    private LinearLayout btnTabOverview;
+    private TextView txtTabOverview, txtTabPhotos, txtTabDetails, txtTabReviews;
+    private View indicatorOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,13 @@ public class ChiTietActivity extends AppCompatActivity {
         ratingBarHienThi = findViewById(R.id.ratingBarHienThi);
         btnSelectDays = findViewById(R.id.btnSelectDays);
 
+        btnTabOverview = findViewById(R.id.btnTabOverview);
+        txtTabOverview = findViewById(R.id.txtTabOverview);
+        txtTabPhotos = findViewById(R.id.txtTabPhotos);
+        txtTabDetails = findViewById(R.id.txtTabDetails);
+        txtTabReviews = findViewById(R.id.txtTabReviews);
+        indicatorOverview = findViewById(R.id.indicatorOverview);
+
         if (getIntent().hasExtra("du_lieu_chuyen_di")) {
             ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
 
@@ -48,7 +60,6 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtSoSaoNhanXet.setText(chuyenDi.getDiemDanhGia() + " (147)");
             }
         }
-
         btnBackCard.setOnClickListener(v -> finish());
 
         btnFavoriteCard.setOnClickListener(v -> {
@@ -57,6 +68,74 @@ public class ChiTietActivity extends AppCompatActivity {
 
         btnSelectDays.setOnClickListener(v -> {
             Toast.makeText(this, "Đang mở lịch chọn ngày cho " + txtTenChiTiet.getText(), Toast.LENGTH_SHORT).show();
+        });
+
+        btnTabOverview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtTabOverview.setTypeface(null, android.graphics.Typeface.BOLD);
+                txtTabOverview.setTextColor(android.graphics.Color.parseColor("#1E2333"));
+                indicatorOverview.setVisibility(View.VISIBLE);
+
+                txtTabPhotos.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabPhotos.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtTabDetails.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabDetails.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtTabReviews.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtMoTaChiTiet.setVisibility(View.VISIBLE);
+            }
+        });
+        txtTabPhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtTabPhotos.setTypeface(null, android.graphics.Typeface.BOLD);
+                txtTabPhotos.setTextColor(android.graphics.Color.parseColor("#1E2333"));
+
+                txtTabOverview.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabOverview.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                indicatorOverview.setVisibility(View.INVISIBLE);
+                txtTabDetails.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabDetails.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtTabReviews.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtMoTaChiTiet.setVisibility(View.GONE);
+            }
+        });
+
+        txtTabDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtTabDetails.setTypeface(null, android.graphics.Typeface.BOLD);
+                txtTabDetails.setTextColor(android.graphics.Color.parseColor("#1E2333"));
+
+                txtTabOverview.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabOverview.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                indicatorOverview.setVisibility(View.INVISIBLE);
+                txtTabPhotos.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabPhotos.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtTabReviews.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+
+                txtMoTaChiTiet.setVisibility(View.GONE);
+            }
+        });
+        txtTabReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtTabReviews.setTypeface(null, android.graphics.Typeface.BOLD);
+                txtTabReviews.setTextColor(android.graphics.Color.parseColor("#1E2333"));
+
+                txtTabOverview.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabOverview.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                indicatorOverview.setVisibility(View.INVISIBLE);
+                txtTabPhotos.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabPhotos.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+                txtTabDetails.setTypeface(null, android.graphics.Typeface.NORMAL);
+                txtTabDetails.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
+
+                txtMoTaChiTiet.setVisibility(View.GONE);
+            }
         });
     }
 }
