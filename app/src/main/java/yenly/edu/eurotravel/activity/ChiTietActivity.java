@@ -25,6 +25,7 @@ public class ChiTietActivity extends AppCompatActivity {
     private View indicatorOverview;
     private LinearLayout layoutOverviewContent;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 imgChiTiet.setImageResource(chuyenDi.getHinhAnh());
                 ratingBarHienThi.setRating(chuyenDi.getDiemDanhGia());
                 txtSoSaoNhanXet.setText(chuyenDi.getDiemDanhGia() + " (147)");
+                txtMoTaChiTiet.setText(chuyenDi.getMoTa());
             }
         }
         btnBackCard.setOnClickListener(v -> finish());
@@ -87,6 +89,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
                 layoutOverviewContent.setVisibility(View.VISIBLE);
             }
+
         });
 
         txtTabPhotos.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +106,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtTabReviews.setTypeface(null, android.graphics.Typeface.NORMAL);
                 txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
                 txtMoTaChiTiet.setVisibility(View.GONE);
+                layoutOverviewContent.setVisibility(View.GONE);
             }
         });
 
@@ -121,6 +125,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtTabReviews.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
 
                 txtMoTaChiTiet.setVisibility(View.GONE);
+                layoutOverviewContent.setVisibility(View.GONE);
             }
         });
         txtTabReviews.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +143,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtTabDetails.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
 
                 txtMoTaChiTiet.setVisibility(View.GONE);
+                layoutOverviewContent.setVisibility(View.GONE);
             }
         });
     }
