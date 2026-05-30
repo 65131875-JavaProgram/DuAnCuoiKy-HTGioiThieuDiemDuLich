@@ -1,5 +1,6 @@
 package yenly.edu.eurotravel.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +60,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtGiaChiTiet.setText("$" + chuyenDi.getGiaTien());
                 txtQuocGiaChiTiet.setText(chuyenDi.getLoaiHinh());
                 txtMoTaChiTiet.setText(chuyenDi.getMoTa());
+                btnSelectDays.setText("🎥 Xem Video Review Thực Tế");
                 android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
                 isFavorite = pref.getBoolean(chuyenDi.getTenDiaDiem(), false);
                 if (isFavorite) {
@@ -83,19 +85,25 @@ public class ChiTietActivity extends AppCompatActivity {
 
                 if (isFavorite) {
                     editor.putBoolean(chuyenDi.getTenDiaDiem(), true);
-                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFD2D2")); // Đổi nền hồng
+                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFD2D2"));
                     Toast.makeText(this, "Đã thêm " + chuyenDi.getTenDiaDiem() + " vào danh sách yêu thích! ❤️", Toast.LENGTH_SHORT).show();
                 } else {
                     editor.putBoolean(chuyenDi.getTenDiaDiem(), false);
-                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFFFFF")); // Về nền trắng
+                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFFFFF"));
                     Toast.makeText(this, "Đã xóa " + chuyenDi.getTenDiaDiem() + " khỏi danh sách yêu thích! 💔", Toast.LENGTH_SHORT).show();
                 }
                 editor.apply();
             }
         });
 
-        btnSelectDays.setOnClickListener(v -> {
-            Toast.makeText(this, "Đang mở lịch chọn ngày cho " + txtTenChiTiet.getText(), Toast.LENGTH_SHORT).show();
+        btnSelectDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tenDiaDiem = txtTenChiTiet.getText().toString();
+                String duongLinkYoutube = "https://www.youtube.com/results?search_query=" + tenDiaDiem + " travel guide 4k";
+                Intent intentYoutube = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(duongLinkYoutube));
+                startActivity(intentYoutube);
+            }
         });
 
         btnTabOverview.setOnClickListener(new View.OnClickListener() {
