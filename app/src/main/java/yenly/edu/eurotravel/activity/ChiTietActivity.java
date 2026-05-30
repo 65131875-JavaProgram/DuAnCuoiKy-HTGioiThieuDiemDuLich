@@ -24,6 +24,7 @@ public class ChiTietActivity extends AppCompatActivity {
     private TextView txtTabOverview, txtTabPhotos, txtTabDetails, txtTabReviews;
     private View indicatorOverview;
     private LinearLayout layoutOverviewContent;
+    private boolean isFavorite = false;
 
 
     @Override
@@ -58,6 +59,13 @@ public class ChiTietActivity extends AppCompatActivity {
                 txtGiaChiTiet.setText("$" + chuyenDi.getGiaTien());
                 txtQuocGiaChiTiet.setText(chuyenDi.getLoaiHinh());
                 txtMoTaChiTiet.setText(chuyenDi.getMoTa());
+                android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
+                isFavorite = pref.getBoolean(chuyenDi.getTenDiaDiem(), false);
+                if (isFavorite) {
+                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFD2D2")); // Đổi sang nền hồng nhạt nếu đã thích
+                } else {
+                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFFFFF")); // Nền trắng mặc định
+                }
                 imgChiTiet.setImageResource(chuyenDi.getHinhAnh());
                 ratingBarHienThi.setRating(chuyenDi.getDiemDanhGia());
                 txtSoSaoNhanXet.setText(chuyenDi.getDiemDanhGia() + " (147)");
@@ -67,7 +75,23 @@ public class ChiTietActivity extends AppCompatActivity {
         btnBackCard.setOnClickListener(v -> finish());
 
         btnFavoriteCard.setOnClickListener(v -> {
-            Toast.makeText(this, "Đã thêm " + txtTenChiTiet.getText() + " vào danh sách yêu thích! ❤️", Toast.LENGTH_SHORT).show();
+            ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
+            if (chuyenDi != null) {
+                android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
+                android.content.SharedPreferences.Editor editor = pref.edit();
+                isFavorite = !isFavorite;
+
+                if (isFavorite) {
+                    editor.putBoolean(chuyenDi.getTenDiaDiem(), true);
+                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFD2D2")); // Đổi nền hồng
+                    Toast.makeText(this, "Đã thêm " + chuyenDi.getTenDiaDiem() + " vào danh sách yêu thích! ❤️", Toast.LENGTH_SHORT).show();
+                } else {
+                    editor.putBoolean(chuyenDi.getTenDiaDiem(), false);
+                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFFFFF")); // Về nền trắng
+                    Toast.makeText(this, "Đã xóa " + chuyenDi.getTenDiaDiem() + " khỏi danh sách yêu thích! 💔", Toast.LENGTH_SHORT).show();
+                }
+                editor.apply();
+            }
         });
 
         btnSelectDays.setOnClickListener(v -> {
