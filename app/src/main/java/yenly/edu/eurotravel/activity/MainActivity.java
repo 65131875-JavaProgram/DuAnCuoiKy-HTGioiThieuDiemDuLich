@@ -1,118 +1,51 @@
 package yenly.edu.eurotravel.activity;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
-import yenly.edu.eurotravel.R;
-import yenly.edu.eurotravel.adapter.ChuyenDiAdapter;
-import yenly.edu.eurotravel.dulieu.ChuyenDi;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView rvChuyenDi;
-    private ChuyenDiAdapter adapter;
-    private List<ChuyenDi> danhSachChuyenDi;
-    private EditText edtSearch;
-    private ImageButton btnMoYeuThich;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        rvChuyenDi = findViewById(R.id.rvChuyenDi);
-        edtSearch = findViewById(R.id.edtSearch);
-        btnMoYeuThich = findViewById(R.id.btnMoYeuThich);
-
-        danhSachChuyenDi = new ArrayList<>();
-        adapter = new ChuyenDiAdapter(danhSachChuyenDi);
-        rvChuyenDi.setLayoutManager(new LinearLayoutManager(this));
-        rvChuyenDi.setAdapter(adapter);
+        setContentView(yenly.edu.eurotravel.R.layout.activity_main);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        themChuyenDi(db, "Paris", "7 Days", "Pháp", 1500, "Kinh đô ánh sáng lãng mạn với tháp Eiffel, bảo tàng Louvre và những dòng sông thơ mộng...");
+        themChuyenDi(db, "Prague", "5 Days", "Séc", 1200, "Thành phố cổ kính với những mái nhà màu mái ngói đỏ, cầu Charles và kiến trúc Gothic đặc trưng...");
+        themChuyenDi(db, "Hồ Como", "4 Days", "Ý", 1400, "Hồ nước thiên nhiên lãng mạn bậc nhất nước Ý, bao quanh bởi các ngôi làng cổ kính và biệt thự sang trọng.");
+        themChuyenDi(db, "Santorini", "6 Days", "Hy Lạp", 1800, "Hòn đảo thiên đường với những ngôi nhà tường trắng mái vòm xanh và hoàng hôn buông xuống biển tuyệt đẹp.");
+        themChuyenDi(db, "Rome", "5 Days", "Ý", 1300, "Nơi thời gian ngưng đọng với Đấu trường La Mã cổ đại, đài phun nước Trevi và kho tàng lịch sử vĩ đại.");
+        themChuyenDi(db, "Hồ Plitvice", "3 Days", "Croatia", 950, "Vườn quốc gia sở hữu chuỗi hồ nước với sắc xanh ngọc bích kỳ ảo và các thác nước hùng vĩ.");
+        themChuyenDi(db, "Bờ biển Amalfi", "7 Days", "Ý", 1650, "Cung đường bờ biển ngoạn mục với những ngôi nhà rực rỡ sắc màu xếp chồng lên nhau vách đá bên đại dương.");
+        themChuyenDi(db, "Hallstatt", "3 Days", "Áo", 1100, "Ngôi làng cổ tích soi bóng xuống mặt hồ yên ả, bao bọc bởi dãy núi Alps hùng vĩ phủ đầy tuyết trắng.");
+        themChuyenDi(db, "London", "6 Days", "Anh", 1700, "Thủ đô sầm uất xứ sương mù với tháp đồng hồ Big Ben, vòng quay London Eye và dòng sông Thames thơ mộng.");
+        themChuyenDi(db, "Đỉnh Matterhorn", "5 Days", "Thụy Sĩ", 2200, "Biểu tượng của dãy Alps Thụy Sĩ, thiên đường cho những ai đam mê trượt tiện và ngắm cảnh núi băng kỳ vĩ.");
+        themChuyenDi(db, "Barcelona", "5 Days", "Tây Ban Nha", 1250, "Thành phố của kiến trúc độc lạ độc quyền bởi kiến trúc sư Gaudi, kết hợp cùng không khí biển sôi động.");
+        themChuyenDi(db, "Hồ Bled", "3 Days", "Slovenia", 850, "Hồ nước đẹp như tranh vẽ với một hòn đảo nhỏ nổi lên ở giữa mang đậm nét thần thoại.");
+        themChuyenDi(db, "Mont Blanc", "7 Days", "Pháp", 1950, "Nóc nhà của Tây Âu, nơi mang lại trải nghiệm cáp treo vượt mây và ngắm toàn cảnh thung lũng tuyết.");
+        themChuyenDi(db, "Venice", "4 Days", "Ý", 1350, "Thành phố của những con kênh lãng mạn, nơi bạn được ngồi thuyền Gondola len lỏi qua các dãy nhà cổ.");
+        themChuyenDi(db, "Algarve", "8 Days", "Bồ Đào Nha", 1450, "Vùng biển phía Nam với những vòm đá hang động tự nhiên bên bờ biển vàng, nước trong vắt nhìn thấu đáy.");
+        themChuyenDi(db, "Dolomites", "6 Days", "Ý", 1600, "Dãy núi đá vôi kỳ vĩ hàng đầu thế giới, địa điểm trekking tuyệt vời với những đồng cỏ xanh mướt trải dài.");
+        themChuyenDi(db, "Amsterdam", "4 Days", "Hà Lan", 1150, "Thành phố của những chiếc xe đạp, những dòng kênh đan xen và cánh đồng hoa tulip rực rỡ sắc màu.");
+        themChuyenDi(db, "Hồ Geneva", "5 Days", "Thụy Sĩ", 2000, "Hồ nước ngọt lớn bậc nhất Châu Âu, nơi có vòi rồng phun nước cao ngút trời và không khí trong lành.");
+        themChuyenDi(db, "Ibiza", "5 Days", "Tây Ban Nha", 1550, "Hòn đảo tiệc tùng sôi động bậc nhất thế giới, sở hữu cả những bãi biển hoang sơ tuyệt mỹ đón nắng hè.");
+        themChuyenDi(db, "Cotswolds", "4 Days", "Anh", 1050, "Vùng đồng quê thanh bình với những ngôi nhà bằng đá mật ong và các khu vườn tuyệt đẹp như bước ra từ thơ ca.");
 
-        db.collection("ChuyenDi")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            danhSachChuyenDi.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String tenDiaDiem = document.contains("tenDiaDiem") ? document.getString("tenDiaDiem") : document.getString("tenChuyenDi");
-                                String duration = document.getString("duration");
-                                String loaiHinh = document.getString("loaiHinh");
-                                String moTa = document.getString("moTa");
+        Toast.makeText(this, "Đang tự động nạp dữ liệu... Ly hãy đợi 5 giây rồi kiểm tra trên Web nhé!", Toast.LENGTH_LONG).show();
+    }
+    private void themChuyenDi(FirebaseFirestore db, String ten, String duration, String loai, int gia, String mota) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("tenDiaDiem", ten);
+        data.put("duration", duration);
+        data.put("loaiHinh", loai);
+        data.put("giaTien", gia);
+        data.put("moTa", mota);
 
-                                int giaTien = 0;
-                                Object giaObj = document.contains("giaTien") ? document.get("giaTien") : document.get("giaChuyenDi");
-                                if (giaObj instanceof Long) {
-                                    giaTien = ((Long) giaObj).intValue();
-                                } else if (giaObj instanceof String) {
-                                    try {
-                                        giaTien = Integer.parseInt((String) giaObj);
-                                    } catch (NumberFormatException e) {
-                                        giaTien = 0;
-                                    }
-                                }
-                                int hinhAnhId = R.drawable.paris;
-                                if (tenDiaDiem != null) {
-                                    String tenXuly = tenDiaDiem.toLowerCase().trim();
-                                    if (tenXuly.contains("paris")) hinhAnhId = R.drawable.paris;
-                                    else if (tenXuly.contains("rome")) hinhAnhId = R.drawable.rome;
-                                    else if (tenXuly.contains("london")) hinhAnhId = R.drawable.london;
-                                    else if (tenXuly.contains("amsterdam")) hinhAnhId = R.drawable.amsterdam;
-                                }
-
-                                float diemDanhGia = 5.0f;
-                                ChuyenDi cd = new ChuyenDi(tenDiaDiem, duration, loaiHinh, hinhAnhId, giaTien, diemDanhGia, moTa);
-                                danhSachChuyenDi.add(cd);
-                            }
-                            adapter.notifyDataSetChanged();
-                            Toast.makeText(MainActivity.this, "Đã tải thành công " + danhSachChuyenDi.size() + " chuyến đi!", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            Toast.makeText(MainActivity.this, "Lỗi tải dữ liệu Firestore: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.locDuLieu(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        if (btnMoYeuThich != null) {
-            btnMoYeuThich.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(MainActivity.this, "Đang mở danh sách yêu thích!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+        db.collection("ChuyenDi").add(data);
     }
 }
