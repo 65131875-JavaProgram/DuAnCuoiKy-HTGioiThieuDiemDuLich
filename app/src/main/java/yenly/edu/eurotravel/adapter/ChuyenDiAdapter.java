@@ -1,5 +1,6 @@
 package yenly.edu.eurotravel.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 import yenly.edu.eurotravel.R;
@@ -21,7 +23,13 @@ public class ChuyenDiAdapter extends RecyclerView.Adapter<ChuyenDiAdapter.Chuyen
 
     public ChuyenDiAdapter(List<ChuyenDi> danhSachGoc) {
         this.danhSachGoc = danhSachGoc;
-        this.danhSachHienTai = new ArrayList<>(danhSachGoc);
+        this.danhSachHienTai = new ArrayList<>();
+    }
+    public void setDanhSachChuyenDi(List<ChuyenDi> list) {
+        this.danhSachGoc = list;
+        this.danhSachHienTai.clear();
+        this.danhSachHienTai.addAll(list);
+        notifyDataSetChanged();
     }
 
     public void locDuLieu(String chuoiTimKiem) {
@@ -32,7 +40,7 @@ public class ChuyenDiAdapter extends RecyclerView.Adapter<ChuyenDiAdapter.Chuyen
             String filterPattern = chuoiTimKiem.toLowerCase().trim();
             for (ChuyenDi item : danhSachGoc) {
                 if (item.getTenDiaDiem().toLowerCase().contains(filterPattern) ||
-                        item.getLoaiHinh().toLowerCase().contains(filterPattern)) {
+                        item.getNgonNgu().toLowerCase().contains(filterPattern)) {
                     danhSachHienTai.add(item);
                 }
             }
@@ -50,14 +58,26 @@ public class ChuyenDiAdapter extends RecyclerView.Adapter<ChuyenDiAdapter.Chuyen
     @Override
     public void onBindViewHolder(@NonNull ChuyenDiViewHolder holder, int position) {
         ChuyenDi chuyenDi = danhSachHienTai.get(position);
+        Context context = holder.itemView.getContext();
 
         holder.txtTen.setText(chuyenDi.getTenDiaDiem());
-        holder.txtThoiGian.setText(chuyenDi.getThoiGian());
-        holder.imgHinh.setImageResource(chuyenDi.getHinhAnh());
-        holder.txtQuocGia.setText(chuyenDi.getLoaiHinh());
+        holder.txtThoiGian.setText(chuyenDi.getSoNgayDi());
+        holder.txtQuocGia.setText(chuyenDi.getNgonNgu());
         holder.txtPrice.setText("$" + chuyenDi.getGiaTien());
         holder.txtRating.setText(String.valueOf(chuyenDi.getDiemDanhGia()));
 
+        String tenHinhAnhLocal = chuyenDi.getTenDiaDiem().toLowerCase().trim();
+        int resIdImage = context.getResources().getIdentifier(tenHinhAnhLocal, "drawable", context.getPackageName());
+
+        if (resIdImage != 0) {
+            Glide.with(context)
+                    .load(resIdImage)
+                    .into(holder.imgHinh);
+        } else {
+            Glide.with(context)
+                    .load(R.drawable.paris)
+                    .into(holder.imgHinh);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +90,7 @@ public class ChuyenDiAdapter extends RecyclerView.Adapter<ChuyenDiAdapter.Chuyen
 
     @Override
     public int getItemCount() {
-        return danhSachHienTai.size();
+        return danhSachHienTai != null ? danhSachHienTai.size() : 0;
     }
 
     public static class ChuyenDiViewHolder extends RecyclerView.ViewHolder {

@@ -4,17 +4,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import java.util.List;
 import yenly.edu.eurotravel.R;
+import yenly.edu.eurotravel.dulieu.ChuyenDi;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
+    private List<ChuyenDi.PhotoItem> mListPhotos;
 
-    private List<Integer> photoList;
-
-    public PhotoAdapter(List<Integer> photoList) {
-        this.photoList = photoList;
+    public PhotoAdapter(List<ChuyenDi.PhotoItem> listPhotos) {
+        this.mListPhotos = listPhotos;
     }
 
     @NonNull
@@ -26,21 +28,29 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-        int imageResId = photoList.get(position);
-        holder.imgPhotoItem.setImageResource(imageResId);
+        ChuyenDi.PhotoItem item = mListPhotos.get(position);
+        if (item != null) {
+            Glide.with(holder.itemView.getContext())
+                    .load(item.getHinhAnhUrl())
+                    .into(holder.imgPhotoItem);
+
+            holder.txtTenDiaDanhNoiTieng.setText(item.getChuThich());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return photoList != null ? photoList.size() : 0;
+        return mListPhotos != null ? mListPhotos.size() : 0;
     }
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
         ImageView imgPhotoItem;
+        TextView txtTenDiaDanhNoiTieng;
 
         public PhotoViewHolder(@NonNull View itemView) {
             super(itemView);
             imgPhotoItem = itemView.findViewById(R.id.imgPhotoItem);
+            txtTenDiaDanhNoiTieng = itemView.findViewById(R.id.txtTenDiaDanhNoiTieng);
         }
     }
 }

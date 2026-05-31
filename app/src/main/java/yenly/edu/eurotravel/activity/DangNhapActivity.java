@@ -56,7 +56,8 @@ public class DangNhapActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(DangNhapActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
+                            String loiHeThong = task.getException() != null ? task.getException().getMessage() : "Lỗi không xác định";
+                            Toast.makeText(DangNhapActivity.this, "Thất bại: " + loiHeThong, Toast.LENGTH_LONG).show();
                         }
                     }
                 });

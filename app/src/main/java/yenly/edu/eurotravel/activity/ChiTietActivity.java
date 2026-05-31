@@ -1,5 +1,6 @@
 package yenly.edu.eurotravel.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
-
 import yenly.edu.eurotravel.R;
 import yenly.edu.eurotravel.adapter.PhotoAdapter;
 import yenly.edu.eurotravel.dulieu.ChuyenDi;
@@ -28,6 +28,7 @@ public class ChiTietActivity extends AppCompatActivity {
     private ImageView imgChiTiet;
     private CardView btnBackCard, btnFavoriteCard;
     private TextView txtTenChiTiet, txtGiaChiTiet, txtQuocGiaChiTiet, txtMoTaChiTiet, txtSoSaoNhanXet;
+    private TextView txtDuration, txtWeather, txtGuide, txtSanBay, txtKhachSan;
     private RatingBar ratingBarHienThi;
     private Button btnSelectDays;
     private LinearLayout btnTabOverview;
@@ -39,7 +40,6 @@ public class ChiTietActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet);
-
         imgChiTiet = findViewById(R.id.imgChiTiet);
         btnBackCard = findViewById(R.id.btnBackCard);
         btnFavoriteCard = findViewById(R.id.btnFavoriteCard);
@@ -50,39 +50,59 @@ public class ChiTietActivity extends AppCompatActivity {
         txtSoSaoNhanXet = findViewById(R.id.txtSoSaoNhanXet);
         ratingBarHienThi = findViewById(R.id.ratingBarHienThi);
         btnSelectDays = findViewById(R.id.btnSelectDays);
-
         btnTabOverview = findViewById(R.id.btnTabOverview);
         txtTabOverview = findViewById(R.id.txtTabOverview);
         txtTabPhotos = findViewById(R.id.txtTabPhotos);
         txtTabDetails = findViewById(R.id.txtTabDetails);
         txtTabReviews = findViewById(R.id.txtTabReviews);
         indicatorOverview = findViewById(R.id.indicatorOverview);
-
         rvPhotos = findViewById(R.id.rvPhotos);
         layoutOverviewContent = findViewById(R.id.layoutOverviewContent);
+
+        txtDuration = findViewById(R.id.txtDuration);
+        txtWeather = findViewById(R.id.txtWeather);
+        txtGuide = findViewById(R.id.txtGuide);
+        txtSanBay = findViewById(R.id.txtSanBay);
+        txtKhachSan = findViewById(R.id.txtKhachSan);
+
+        List<ChuyenDi.PhotoItem> danhSachAnh = new ArrayList<>();
 
         if (getIntent().hasExtra("du_lieu_chuyen_di")) {
             ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
             if (chuyenDi != null) {
                 txtTenChiTiet.setText(chuyenDi.getTenDiaDiem());
                 txtGiaChiTiet.setText("$" + chuyenDi.getGiaTien());
-                txtQuocGiaChiTiet.setText(chuyenDi.getLoaiHinh());
-                txtMoTaChiTiet.setText(chuyenDi.getMoTa());
+                txtQuocGiaChiTiet.setText(chuyenDi.getNgonNgu());
+                txtMoTaChiTiet.setText(chuyenDi.getMoTaTongQuan());
                 btnSelectDays.setText("🎥 Xem Video Review Thực Tế");
 
+                txtDuration.setText(chuyenDi.getSoNgayDi());
+                txtWeather.setText(chuyenDi.getThoiTiet());
+                txtGuide.setText(chuyenDi.getNgonNgu());
+                txtSanBay.setText(chuyenDi.getThongTinSanBay());
+                txtKhachSan.setText(chuyenDi.getKhachSanNoiBat());
+
+                if (chuyenDi.getDanhSachAnhTabPhotos() != null) {
+                    danhSachAnh.addAll(chuyenDi.getDanhSachAnhTabPhotos());
+                }
                 android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
                 isFavorite = pref.getBoolean(chuyenDi.getTenDiaDiem(), false);
-                if (isFavorite) {
-                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFD2D2"));
+                btnFavoriteCard.setCardBackgroundColor(isFavorite ?
+                        android.graphics.Color.parseColor("#FFD2D2") : android.graphics.Color.parseColor("#FFFFFF"));
+
+                String tenHinhAnhLocal = chuyenDi.getTenDiaDiem().toLowerCase().trim();
+                int resIdImage = getResources().getIdentifier(tenHinhAnhLocal, "drawable", getPackageName());
+
+                if (resIdImage != 0) {
+                    Glide.with(this).load(resIdImage).into(imgChiTiet);
                 } else {
-                    btnFavoriteCard.setCardBackgroundColor(android.graphics.Color.parseColor("#FFFFFF"));
+                    Glide.with(this).load(R.drawable.paris).into(imgChiTiet);
                 }
-                imgChiTiet.setImageResource(chuyenDi.getHinhAnh());
+
                 ratingBarHienThi.setRating(chuyenDi.getDiemDanhGia());
                 txtSoSaoNhanXet.setText(chuyenDi.getDiemDanhGia() + " (147)");
             }
         }
-
         btnBackCard.setOnClickListener(v -> finish());
         btnFavoriteCard.setOnClickListener(v -> {
             ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
@@ -109,37 +129,27 @@ public class ChiTietActivity extends AppCompatActivity {
             Intent intentYoutube = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(duongLinkYoutube));
             startActivity(intentYoutube);
         });
-
         btnTabOverview.setOnClickListener(v -> {
             txtTabOverview.setTypeface(null, android.graphics.Typeface.BOLD);
             txtTabOverview.setTextColor(android.graphics.Color.parseColor("#1E2333"));
             indicatorOverview.setVisibility(View.VISIBLE);
-
             txtTabPhotos.setTypeface(null, android.graphics.Typeface.NORMAL);
             txtTabPhotos.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
             layoutOverviewContent.setVisibility(View.VISIBLE);
             rvPhotos.setVisibility(View.GONE);
         });
+
         txtTabPhotos.setOnClickListener(v -> {
             txtTabPhotos.setTypeface(null, android.graphics.Typeface.BOLD);
             txtTabPhotos.setTextColor(android.graphics.Color.parseColor("#1E2333"));
-
             txtTabOverview.setTypeface(null, android.graphics.Typeface.NORMAL);
             txtTabOverview.setTextColor(android.graphics.Color.parseColor("#A0A0A0"));
             indicatorOverview.setVisibility(View.INVISIBLE);
             layoutOverviewContent.setVisibility(View.GONE);
             rvPhotos.setVisibility(View.VISIBLE);
         });
-
-        List<Integer> danhSachAnh = new ArrayList<>();
-        danhSachAnh.add(R.drawable.paris);
-        danhSachAnh.add(R.drawable.paris);
-        danhSachAnh.add(R.drawable.paris);
-        danhSachAnh.add(R.drawable.paris);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvPhotos.setLayoutManager(layoutManager);
-
         PhotoAdapter photoAdapter = new PhotoAdapter(danhSachAnh);
         rvPhotos.setAdapter(photoAdapter);
         rvPhotos.setVisibility(View.GONE);
