@@ -342,6 +342,74 @@
                         android:layout_marginTop="16dp"
                         android:visibility="gone" />
 
+                    <LinearLayout
+                        android:id="@+id/layoutDetailsContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Khám phá văn hóa &amp; Lịch sử"
+                            android:textStyle="bold"
+                            android:textColor="#1E2333"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <TextView
+                            android:id="@+id/txtDetailsText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Đang tải dữ liệu..."
+                            android:textSize="15sp"
+                            android:textColor="#5E6373"
+                            android:lineSpacingExtra="6dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutReviewsContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đánh giá từ du khách (147)"
+                            android:textStyle="bold"
+                            android:textColor="#1E2333"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="15dp"/>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Trần Văn A" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chuyến đi tuyệt vời, cảnh quan đẹp ngoài sức tưởng tượng! Hướng dẫn viên cực kỳ có tâm." android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐ Nguyễn Thị B" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rất đáng tiền. Khách sạn hơi xa trung tâm một chút nhưng phòng ốc sang trọng, đồ ăn siêu ngon." android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Lê Hoàng C" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Một trải nghiệm để đời. Kiến trúc ở đây làm tôi choáng ngợp. Chắc chắn sẽ quay lại cùng gia đình!" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐ Phạm D" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thời tiết đẹp, chụp được cả ngàn tấm ảnh sống ảo. Duyệt!" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Vũ E" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mọi thứ hoàn hảo từ A-Z. Cảm ơn app đã gợi ý một địa điểm tuyệt vời như thế này!" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <Button
                         android:id="@+id/btnSelectDays"
                         android:layout_width="match_parent"
