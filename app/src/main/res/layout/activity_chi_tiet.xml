@@ -378,35 +378,25 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đánh giá từ du khách (147)"
+                            android:text="Đánh giá tiêu biểu từ cộng đồng"
                             android:textStyle="bold"
                             android:textColor="#1E2333"
                             android:textSize="18sp"
                             android:layout_marginBottom="15dp"/>
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Trần Văn A" android:textStyle="bold" android:textColor="#1E2333"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chuyến đi tuyệt vời, cảnh quan đẹp ngoài sức tưởng tượng! Hướng dẫn viên cực kỳ có tâm." android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                            <TextView android:id="@+id/txtReviewUser1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Người dùng" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:id="@+id/txtReviewContent1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nội dung đánh giá 1" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐ Nguyễn Thị B" android:textStyle="bold" android:textColor="#1E2333"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rất đáng tiền. Khách sạn hơi xa trung tâm một chút nhưng phòng ốc sang trọng, đồ ăn siêu ngon." android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                            <TextView android:id="@+id/txtReviewUser2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐ Người dùng" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:id="@+id/txtReviewContent2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nội dung đánh giá 2" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Lê Hoàng C" android:textStyle="bold" android:textColor="#1E2333"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Một trải nghiệm để đời. Kiến trúc ở đây làm tôi choáng ngợp. Chắc chắn sẽ quay lại cùng gia đình!" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐ Phạm D" android:textStyle="bold" android:textColor="#1E2333"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thời tiết đẹp, chụp được cả ngàn tấm ảnh sống ảo. Duyệt!" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F5F6F8" android:padding="12dp" android:layout_marginBottom="10dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Vũ E" android:textStyle="bold" android:textColor="#1E2333"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mọi thứ hoàn hảo từ A-Z. Cảm ơn app đã gợi ý một địa điểm tuyệt vời như thế này!" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
+                            <TextView android:id="@+id/txtReviewUser3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⭐⭐⭐⭐⭐ Người dùng" android:textStyle="bold" android:textColor="#1E2333"/>
+                            <TextView android:id="@+id/txtReviewContent3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nội dung đánh giá 3" android:textColor="#5E6373" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </LinearLayout>
 
