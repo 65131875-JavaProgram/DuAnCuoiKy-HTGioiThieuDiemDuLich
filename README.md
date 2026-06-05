@@ -50,10 +50,10 @@
 <img width="350" height="789" alt="image" src="https://github.com/user-attachments/assets/c6a1922c-b1fc-4bc4-bbe9-f669f7dcef34" /><img width="354" height="786" alt="image" src="https://github.com/user-attachments/assets/17269619-1f4f-402a-b7e7-dac57f1aebff" /><img width="352" height="787" alt="image" src="https://github.com/user-attachments/assets/b727c93f-1eef-40fa-b4dd-bc409b398fe2" /><img width="351" height="788" alt="image" src="https://github.com/user-attachments/assets/54a0ede6-4665-4386-a4a9-7cdc703ff2ed" /><img width="352" height="789" alt="image" src="https://github.com/user-attachments/assets/9d896ba4-51d5-4059-bd1b-79bb35eaefb5" />
 
 ### 🤖 3. Phân Hệ Trợ Lý Ảo Groq AI
-        <img width="350" height="789" alt="image" src="https://github.com/user-attachments/assets/6890451f-9a4f-4c23-b0b2-c1d2dc4302b4" /><img width="353" height="790" alt="image" src="https://github.com/user-attachments/assets/fca5c023-0654-4a36-8c53-3f02bb0b8218" />
+  <img width="350" height="789" alt="image" src="https://github.com/user-attachments/assets/6890451f-9a4f-4c23-b0b2-c1d2dc4302b4" /><img width="353" height="790" alt="image" src="https://github.com/user-attachments/assets/fca5c023-0654-4a36-8c53-3f02bb0b8218" />
 
 ### 📐 4. Phân hệ địa điểm yêu thích cá nhân
-                   <img width="348" height="787" alt="image" src="https://github.com/user-attachments/assets/9a3a830d-b801-4767-bbef-02d9c2bb1e6d" />
+   <img width="348" height="787" alt="image" src="https://github.com/user-attachments/assets/9a3a830d-b801-4767-bbef-02d9c2bb1e6d" />
 
 
 
