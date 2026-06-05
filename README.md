@@ -4,6 +4,7 @@
 
 **EuroTravel** là một ứng dụng di động chạy trên hệ điều hành Android, được thiết kế nhằm mang lại trải nghiệm khám phá và tìm hiểu văn hóa, địa danh du lịch Châu Âu một cách toàn diện và sống động nhất cho người dùng. Đặc biệt, ứng dụng tích hợp công nghệ Trí tuệ nhân tạo (AI) đột phá giúp giải đáp mọi thắc mắc du lịch trong tích tắc.
 
+## VIDEO BÁO CÁO VỀ APP-- https://youtu.be/ELV4PlurZh8
 ---
 
 ## 🚀 Các Tính Năng Cốt Lõi
