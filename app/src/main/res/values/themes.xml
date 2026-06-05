@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.EuroTravel" parent="Base.Theme.EuroTravel" />
+    <style name="BottomNavTextStyle">
+        <item name="android:textColor">#121931</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

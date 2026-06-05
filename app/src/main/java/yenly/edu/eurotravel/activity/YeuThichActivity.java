@@ -26,37 +26,36 @@ public class YeuThichActivity extends AppCompatActivity {
 
         rvYeuThich = findViewById(R.id.rvYeuThich);
         btnBackCardYeuThich = findViewById(R.id.btnBackCardYeuThich);
-        List<ChuyenDi> danhSachGoc = (List<ChuyenDi>) getIntent().getSerializableExtra("danh_sach_goc");
 
-        if (danhSachGoc != null) {
-            android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
-
-            for (ChuyenDi cd : danhSachGoc) {
-                boolean isFav = pref.getBoolean(cd.getTenDiaDiem(), false);
-                if (isFav) {
-                    danhSachYeuThich.add(cd);
-                }
-            }
-        }
         rvYeuThich.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ChuyenDiAdapter(danhSachYeuThich);
         rvYeuThich.setAdapter(adapter);
-        adapter.locDuLieu("");
+
+        CapNhatDanhSachYeuThich();
+
         btnBackCardYeuThich.setOnClickListener(v -> finish());
     }
+
     @Override
     protected void onResume() {
         super.onResume();
+        CapNhatDanhSachYeuThich();
+    }
+
+    private void CapNhatDanhSachYeuThich() {
         List<ChuyenDi> danhSachGoc = (List<ChuyenDi>) getIntent().getSerializableExtra("danh_sach_goc");
         if (danhSachGoc != null) {
             danhSachYeuThich.clear();
             android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
+
             for (ChuyenDi cd : danhSachGoc) {
                 if (pref.getBoolean(cd.getTenDiaDiem(), false)) {
                     danhSachYeuThich.add(cd);
                 }
             }
+
             if (adapter != null) {
+                adapter.notifyDataSetChanged();
                 adapter.locDuLieu("");
             }
         }

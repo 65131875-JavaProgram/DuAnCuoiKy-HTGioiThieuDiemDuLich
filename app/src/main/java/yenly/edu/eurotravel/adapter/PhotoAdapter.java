@@ -14,9 +14,15 @@ import yenly.edu.eurotravel.dulieu.ChuyenDi;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
     private List<ChuyenDi.PhotoItem> mListPhotos;
+    private OnPhotoClickListener mListener;
 
-    public PhotoAdapter(List<ChuyenDi.PhotoItem> listPhotos) {
+    public interface OnPhotoClickListener {
+        void onPhotoClick(ChuyenDi.PhotoItem item);
+    }
+
+    public PhotoAdapter(List<ChuyenDi.PhotoItem> listPhotos, OnPhotoClickListener listener) {
         this.mListPhotos = listPhotos;
+        this.mListener = listener;
     }
 
     @NonNull
@@ -35,6 +41,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                     .into(holder.imgPhotoItem);
 
             holder.txtTenDiaDanhNoiTieng.setText(item.getChuThich());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.onPhotoClick(item);
+                    }
+                }
+            });
         }
     }
 

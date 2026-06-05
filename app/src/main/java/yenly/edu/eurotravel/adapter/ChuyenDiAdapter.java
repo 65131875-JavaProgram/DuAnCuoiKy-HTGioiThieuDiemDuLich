@@ -25,6 +25,7 @@ public class ChuyenDiAdapter extends RecyclerView.Adapter<ChuyenDiAdapter.Chuyen
         this.danhSachGoc = danhSachGoc;
         this.danhSachHienTai = new ArrayList<>();
     }
+
     public void setDanhSachChuyenDi(List<ChuyenDi> list) {
         this.danhSachGoc = list;
         this.danhSachHienTai.clear();
@@ -66,24 +67,45 @@ public class ChuyenDiAdapter extends RecyclerView.Adapter<ChuyenDiAdapter.Chuyen
         holder.txtPrice.setText("$" + chuyenDi.getGiaTien());
         holder.txtRating.setText(String.valueOf(chuyenDi.getDiemDanhGia()));
 
-        String tenHinhAnhLocal = chuyenDi.getTenDiaDiem().toLowerCase().trim();
+        String tenDiaDiem = chuyenDi.getTenDiaDiem();
+        String tenHinhAnhLocal = "";
+        if (tenDiaDiem != null) {
+            tenHinhAnhLocal = tenDiaDiem.toLowerCase().trim().replace(" ", "_");
+        }
+
         int resIdImage = context.getResources().getIdentifier(tenHinhAnhLocal, "drawable", context.getPackageName());
+
+        if (resIdImage == 0 && chuyenDi.getHinhAnhDaiDien() != null) {
+            String anhDb = chuyenDi.getHinhAnhDaiDien().toLowerCase().trim()
+                    .replace(".jpg", "").replace(".png", "").replace(".webp", "");
+            resIdImage = context.getResources().getIdentifier(anhDb, "drawable", context.getPackageName());
+        }
 
         if (resIdImage != 0) {
             Glide.with(context)
                     .load(resIdImage)
                     .into(holder.imgHinh);
         } else {
-            Glide.with(context)
-                    .load(R.drawable.paris)
-                    .into(holder.imgHinh);
+            String urlXuly = chuyenDi.getHinhAnhDaiDien();
+            if (urlXuly != null && (urlXuly.startsWith("http://") || urlXuly.startsWith("https://"))) {
+                Glide.with(context)
+                        .load(urlXuly)
+                        .placeholder(R.drawable.paris)
+                        .error(R.drawable.paris)
+                        .into(holder.imgHinh);
+            } else {
+                Glide.with(context)
+                        .load(R.drawable.paris)
+                        .into(holder.imgHinh);
+            }
         }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ChiTietActivity.class);
+                Intent intent = new Intent(context, ChiTietActivity.class);
                 intent.putExtra("du_lieu_chuyen_di", chuyenDi);
-                v.getContext().startActivity(intent);
+                context.startActivity(intent);
             }
         });
     }

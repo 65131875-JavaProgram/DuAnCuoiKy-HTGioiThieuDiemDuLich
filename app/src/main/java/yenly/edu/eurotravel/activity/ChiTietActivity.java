@@ -1,14 +1,15 @@
 package yenly.edu.eurotravel.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,19 +27,16 @@ public class ChiTietActivity extends AppCompatActivity {
 
     private RecyclerView rvPhotos;
     private LinearLayout layoutOverviewContent, layoutDetailsContent, layoutReviewsContent;
-
+    private TextView txtTabOverview, txtTabPhotos, txtTabDetails, txtTabReviews;
     private ImageView imgChiTiet;
-    private CardView btnBackCard, btnFavoriteCard;
+    private CardView btnBackCard;
     private TextView txtTenChiTiet, txtGiaChiTiet, txtQuocGiaChiTiet, txtMoTaChiTiet, txtSoSaoNhanXet;
     private TextView txtDuration, txtWeather, txtGuide, txtSanBay, txtKhachSan, txtDetailsText;
-    private TextView txtReviewUser1, txtReviewContent1, txtReviewUser2, txtReviewContent2, txtReviewUser3, txtReviewContent3;
-    private RatingBar ratingBarHienThi;
-    private Button btnSelectDays;
 
-    private LinearLayout btnTabOverview;
-    private TextView txtTabOverview, txtTabPhotos, txtTabDetails, txtTabReviews;
-    private View indicatorOverview;
+    private ChuyenDi chuyenDi;
 
+    private CardView btnFavoriteCard;
+    private Button btnWatchVideoCard;
     private boolean isFavorite = false;
 
     @Override
@@ -46,365 +44,409 @@ public class ChiTietActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet);
 
-        imgChiTiet = findViewById(R.id.imgChiTiet);
-        btnBackCard = findViewById(R.id.btnBackCard);
-        btnFavoriteCard = findViewById(R.id.btnFavoriteCard);
-        txtTenChiTiet = findViewById(R.id.txtTenChiTiet);
-        txtGiaChiTiet = findViewById(R.id.txtGiaChiTiet);
-        txtQuocGiaChiTiet = findViewById(R.id.txtQuocGiaChiTiet);
-        txtMoTaChiTiet = findViewById(R.id.txtMoTaChiTiet);
-        txtSoSaoNhanXet = findViewById(R.id.txtSoSaoNhanXet);
-        ratingBarHienThi = findViewById(R.id.ratingBarHienThi);
-        btnSelectDays = findViewById(R.id.btnSelectDays);
+        AnhXa();
 
-        btnTabOverview = findViewById(R.id.btnTabOverview);
-        txtTabOverview = findViewById(R.id.txtTabOverview);
-        txtTabPhotos = findViewById(R.id.txtTabPhotos);
-        txtTabDetails = findViewById(R.id.txtTabDetails);
-        txtTabReviews = findViewById(R.id.txtTabReviews);
-        indicatorOverview = findViewById(R.id.indicatorOverview);
+        chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
 
-        rvPhotos = findViewById(R.id.rvPhotos);
-        layoutOverviewContent = findViewById(R.id.layoutOverviewContent);
-        layoutDetailsContent = findViewById(R.id.layoutDetailsContent);
-        layoutReviewsContent = findViewById(R.id.layoutReviewsContent);
-        txtDetailsText = findViewById(R.id.txtDetailsText);
+        if (chuyenDi != null) {
+            DoDuLieuLenGiaoDien();
+        } else {
+            Toast.makeText(this, "Không tìm thấy dữ liệu!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-        txtDuration = findViewById(R.id.txtDuration);
-        txtWeather = findViewById(R.id.txtWeather);
-        txtGuide = findViewById(R.id.txtGuide);
-        txtSanBay = findViewById(R.id.txtSanBay);
-        txtKhachSan = findViewById(R.id.txtKhachSan);
+        CaiDatSuKienTab();
 
-        txtReviewUser1 = findViewById(R.id.txtReviewUser1);
-        txtReviewContent1 = findViewById(R.id.txtReviewContent1);
-        txtReviewUser2 = findViewById(R.id.txtReviewUser2);
-        txtReviewContent2 = findViewById(R.id.txtReviewContent2);
-        txtReviewUser3 = findViewById(R.id.txtReviewUser3);
-        txtReviewContent3 = findViewById(R.id.txtReviewContent3);
 
-        List<ChuyenDi.PhotoItem> danhSachAnh = new ArrayList<>();
+        if (btnFavoriteCard != null) {
+            SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
 
-        if (getIntent().hasExtra("du_lieu_chuyen_di")) {
-            ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
-            if (chuyenDi != null) {
-                txtTenChiTiet.setText(chuyenDi.getTenDiaDiem());
-                txtGiaChiTiet.setText("$" + chuyenDi.getGiaTien());
-                txtQuocGiaChiTiet.setText(chuyenDi.getNgonNgu());
-                txtMoTaChiTiet.setText(chuyenDi.getMoTaTongQuan());
-                btnSelectDays.setText("🎥 Xem Video Review Thực Tế");
+            isFavorite = pref.getBoolean(chuyenDi.getTenDiaDiem(), false);
 
-                txtDuration.setText(chuyenDi.getSoNgayDi());
-                txtWeather.setText(chuyenDi.getThoiTiet());
-                txtGuide.setText(chuyenDi.getNgonNgu());
-                txtSanBay.setText(chuyenDi.getThongTinSanBay());
-                txtKhachSan.setText(chuyenDi.getKhachSanNoiBat());
-
-                napDuLieuNộiDungĐộng(chuyenDi.getTenDiaDiem());
-
-                if (chuyenDi.getDanhSachAnhTabPhotos() != null) {
-                    danhSachAnh.addAll(chuyenDi.getDanhSachAnhTabPhotos());
-                }
-                android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
-                isFavorite = pref.getBoolean(chuyenDi.getTenDiaDiem(), false);
-                btnFavoriteCard.setCardBackgroundColor(isFavorite ?
-                        Color.parseColor("#FFD2D2") : Color.parseColor("#FFFFFF"));
-
-                String tenHinhAnhLocal = chuyenDi.getTenDiaDiem().toLowerCase().trim();
-                int resIdImage = getResources().getIdentifier(tenHinhAnhLocal, "drawable", getPackageName());
-
-                if (resIdImage != 0) {
-                    Glide.with(this).load(resIdImage).into(imgChiTiet);
-                } else {
-                    Glide.with(this).load(R.drawable.paris).into(imgChiTiet);
-                }
-
-                ratingBarHienThi.setRating(chuyenDi.getDiemDanhGia());
-                txtSoSaoNhanXet.setText(chuyenDi.getDiemDanhGia() + " (147)");
+            ImageView imgStar = (ImageView) btnFavoriteCard.getChildAt(0);
+            if (imgStar != null) {
+                imgStar.setColorFilter(isFavorite ? Color.RED : Color.parseColor("#2B2E43"));
             }
+
+            btnFavoriteCard.setOnClickListener(v -> {
+                isFavorite = !isFavorite;
+
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean(chuyenDi.getTenDiaDiem(), isFavorite);
+                editor.apply();
+
+                if (imgStar != null) {
+                    imgStar.setColorFilter(isFavorite ? Color.RED : Color.parseColor("#2B2E43"));
+                }
+
+                if (isFavorite) {
+                    Toast.makeText(ChiTietActivity.this, "Đã thêm vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ChiTietActivity.this, "Đã xóa khỏi danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        if (btnWatchVideoCard != null) {
+            btnWatchVideoCard.setOnClickListener(v -> {
+                if (chuyenDi != null && chuyenDi.getTenDiaDiem() != null) {
+                    String tuKhoa = "travel vlog" + chuyenDi.getTenDiaDiem();
+                    String urlYoutube = "https://www.youtube.com/results?search_query=" + Uri.encode(tuKhoa);
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlYoutube));
+                    intent.setPackage("com.google.android.youtube");
+
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        intent.setPackage(null);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
 
         btnBackCard.setOnClickListener(v -> finish());
-
-        btnFavoriteCard.setOnClickListener(v -> {
-            ChuyenDi chuyenDi = (ChuyenDi) getIntent().getSerializableExtra("du_lieu_chuyen_di");
-            if (chuyenDi != null) {
-                android.content.SharedPreferences pref = getSharedPreferences("YeuThichPrefs", MODE_PRIVATE);
-                android.content.SharedPreferences.Editor editor = pref.edit();
-                isFavorite = !isFavorite;
-                if (isFavorite) {
-                    editor.putBoolean(chuyenDi.getTenDiaDiem(), true);
-                    btnFavoriteCard.setCardBackgroundColor(Color.parseColor("#FFD2D2"));
-                    Toast.makeText(this, "Đã thêm vào yêu thích! ❤️", Toast.LENGTH_SHORT).show();
-                } else {
-                    editor.putBoolean(chuyenDi.getTenDiaDiem(), false);
-                    btnFavoriteCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
-                    Toast.makeText(this, "Đã xóa khỏi yêu thích! 💔", Toast.LENGTH_SHORT).show();
-                }
-                editor.apply();
-            }
-        });
-
-        btnSelectDays.setOnClickListener(v -> {
-            String tenDiaDiem = txtTenChiTiet.getText().toString();
-            String duongLinkYoutube = "https://www.youtube.com/results?search_query=" + tenDiaDiem + " travel vlog";
-            Intent intentYoutube = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(duongLinkYoutube));
-            startActivity(intentYoutube);
-        });
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        rvPhotos.setLayoutManager(layoutManager);
-        PhotoAdapter photoAdapter = new PhotoAdapter(danhSachAnh);
-        rvPhotos.setAdapter(photoAdapter);
-
-        btnTabOverview.setOnClickListener(v -> kichHoatTab(1));
-        txtTabPhotos.setOnClickListener(v -> kichHoatTab(2));
-        txtTabDetails.setOnClickListener(v -> kichHoatTab(3));
-        txtTabReviews.setOnClickListener(v -> kichHoatTab(4));
     }
 
-    private void kichHoatTab(int viTri) {
-        txtTabOverview.setTypeface(null, Typeface.NORMAL);
-        txtTabOverview.setTextColor(Color.parseColor("#A0A0A0"));
-        txtTabPhotos.setTypeface(null, Typeface.NORMAL);
-        txtTabPhotos.setTextColor(Color.parseColor("#A0A0A0"));
-        txtTabDetails.setTypeface(null, Typeface.NORMAL);
-        txtTabDetails.setTextColor(Color.parseColor("#A0A0A0"));
-        txtTabReviews.setTypeface(null, Typeface.NORMAL);
-        txtTabReviews.setTextColor(Color.parseColor("#A0A0A0"));
+    private void DoDuLieuLenGiaoDien() {
+        txtTenChiTiet.setText(chuyenDi.getTenDiaDiem());
+        txtGiaChiTiet.setText("$" + chuyenDi.getGiaTien());
+        txtQuocGiaChiTiet.setText(chuyenDi.getNgonNgu());
+        txtSoSaoNhanXet.setText(chuyenDi.getDiemDanhGia() + " (147)");
 
-        indicatorOverview.setVisibility(View.INVISIBLE);
+        if (chuyenDi.getMoTaTongQuan() != null && !chuyenDi.getMoTaTongQuan().isEmpty()) {
+            txtMoTaChiTiet.setText(chuyenDi.getMoTaTongQuan());
+        } else {
+            txtMoTaChiTiet.setText("Hãy tận hưởng một chuyến đi tuyệt vời với những trải nghiệm không thể nào quên tại " + chuyenDi.getTenDiaDiem() + ".");
+        }
+
+        Glide.with(this)
+                .load(chuyenDi.getHinhAnhDaiDien())
+                .placeholder(R.drawable.paris)
+                .error(R.drawable.paris)
+                .into(imgChiTiet);
+
+        txtDuration.setText(chuyenDi.getSoNgayDi() != null ? chuyenDi.getSoNgayDi() : "N/A");
+        txtWeather.setText(chuyenDi.getThoiTiet() != null ? chuyenDi.getThoiTiet() : "N/A");
+        txtGuide.setText(chuyenDi.getNgonNgu() != null ? chuyenDi.getNgonNgu() : "N/A");
+        txtSanBay.setText(chuyenDi.getThongTinSanBay() != null ? chuyenDi.getThongTinSanBay() : "Đang cập nhật");
+        txtKhachSan.setText(chuyenDi.getKhachSanNoiBat() != null ? chuyenDi.getKhachSanNoiBat() : "Đang cập nhật");
+
+        txtDetailsText.setText(taoLichSuHapDan(chuyenDi.getTenDiaDiem()));
+
+        List<ChuyenDi.PhotoItem> listPhotos = chuyenDi.getDanhSachAnhTabPhotos();
+        if (listPhotos == null) {
+            listPhotos = new ArrayList<>();
+        }
+
+        rvPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        PhotoAdapter photoAdapter = new PhotoAdapter(listPhotos, item -> {
+            Toast.makeText(ChiTietActivity.this, "Đang xem: " + item.getChuThich(), Toast.LENGTH_SHORT).show();
+        });
+        rvPhotos.setAdapter(photoAdapter);
+    }
+
+    private String taoLichSuHapDan(String tenDiaDiem) {
+        if (tenDiaDiem == null) return "Đang cập nhật thông tin chi tiết...";
+        String name = tenDiaDiem.toLowerCase().trim();
+
+        if (name.contains("paris")) {
+            return "Kinh đô Ánh sáng Paris không chỉ là trái tim của nước Pháp mà còn là biểu tượng tối thượng của sự lãng mạn, nghệ thuật và kiến trúc vĩ đại trên toàn cầu.\n\n" +
+                    "🏰 DẤU ẤN LỊCH SỬ HOÀNG GIA:\n" +
+                    "Trải qua hàng ngàn năm lịch sử, từ một khu định cư cổ đại của bộ tộc Parisii bên bờ sông Seine, Paris đã vươn mình trở thành trung tâm văn hóa lớn nhất Châu Âu vào thế kỷ 12. Nơi đây từng chứng kiến cuộc Cách mạng Pháp lịch sử năm 1789 phá bỏ ngục Bastille, mở ra kỷ nguyên mới cho nhân loại. Mỗi viên gạch tại các cung điện, quảng trường đều thấm đẫm câu chuyện của các triều đại vua chúa quyền lực.\n\n" +
+                    "✨ CÁC TRẢI NGHIỆM ĐỘC QUYỀN MÊ HOẶC DU KHÁCH:\n" +
+                    "• Tháp Eiffel vĩ đại: Công trình bằng thép biểu tượng, nơi bạn có thể ngắm nhìn trọn vẹn toàn cảnh thành phố lung linh, huyền ảo khi màn đêm buông xuống.\n" +
+                    "• Đại lộ Champs-Élysées & Khải Hoàn Môn: Con đường mua sắm sầm uất bậc nhất thế giới, nơi tôn vinh những chiến công hiển hách của vị hoàng đế Napoléon.\n" +
+                    "• Bảo tàng Louvre huyền thoại: Nơi lưu giữ hàng vạn kiệt tác nghệ thuật vô giá của nhân loại, bao gồm bức tranh nàng Mona Lisa với nụ cười bí ẩn.\n\n" +
+                    "Đến với Paris, hành trình tuyệt vời nhất là được tản bộ dọc bờ sông Seine thơ mộng, ghé vào một quán cà phê vỉa hè cổ kính, thưởng thức chiếc bánh sừng bò thơm nức và cảm nhận hơi thở lãng mạn len lỏi qua từng góc phố cổ!";
+        }
+
+        if (name.contains("london")) {
+            return "London - Thủ đô sương mù đầy kiêu hãnh của Vương quốc Anh, là một trong những thành phố vĩ đại nhất thế giới, nơi quá khứ hoàng gia rực rỡ hòa quyện hoàn hảo với nhịp sống hiện đại siêu đô thị.\n\n" +
+                    "👑 DI SẢN VÀ THẾ LỰC HOÀNG GIA:\n" +
+                    "Được thành lập bởi người La Mã cổ đại với tên gọi Londinium cách đây hơn 2.000 năm, London từng là trung tâm quyền lực của Đế quốc Anh rộng lớn - nơi mặt trời không bao giờ lặn. Thành phố sở hữu một kho tàng lịch sử khổng lồ với những cung điện lộng lẫy, những nghi lễ đổi gác trang nghiêm và những câu chuyện huyền bí về hoàng tộc Anh được truyền tụng qua nhiều thế hệ.\n\n" +
+                    "✨ CÁC ĐIỂM ĐẾN KHÔNG THỂ BỎ QUA:\n" +
+                    "• Tháp đồng hồ Big Ben & Tòa nhà Quốc hội: Biểu tượng trường tồn theo thời gian, đứng sừng sững bên dòng sông Thames êm đềm.\n" +
+                    "• Cung điện Buckingham: Nơi ở chính thức của Nữ hoàng và Đức vua Anh, mang đậm kiến trúc hoàng gia xa hoa bậc nhất.\n" +
+                    "• Vòng quay khổng lồ London Eye: Trải nghiệm ngồi trên cabin trên cao để phóng tầm mắt ngắm nhìn đường chân trời tuyệt đẹp của toàn thành phố.\n\n" +
+                    "Hãy dành một buổi chiều ngồi trên chiếc xe buýt hai tầng màu đỏ đặc trưng, thưởng thức một tách trà chiều chuẩn vị quý tộc Anh và đắm mình vào không gian văn hóa đẳng cấp tại đây!";
+        }
+
+        if (name.contains("santorini")) {
+            return "Santorini là hòn đảo thiên đường nổi tiếng nhất của Hy Lạp và là viên ngọc quý của biển Aegean, được hình thành từ tàn tích của một trận phun trào núi lửa khủng khiếp trong quá khứ.\n\n" +
+                    "💙 ĐẶC TRƯNG KIẾN TRÚC ĐỘC NHẤT:\n" +
+                    "Hòn đảo hớp hồn du khách bởi lối kiến trúc Cycladic độc đáo: những ngôi nhà sơn trắng muốt như những khối đường tinh khiết, nằm cheo leo trên vách đá dựng đứng, nổi bật với những mái vòm màu xanh đại dương trùng khớp với màu nước biển Địa Trung Hải.\n\n" +
+                    "✨ KỲ QUAN VÀ TRẢI NGHIỆM ĐẮT GIÁ:\n" +
+                    "• Ngôi làng Thơ mộng Oia: Nơi ngắm hoàng hôn buông xuống biển được bình chọn là lãng mạn và đẹp nhất hành tinh. Khi mặt trời lặn, toàn bộ vách đá chuyển sang màu hồng cam huyền ảo.\n" +
+                    "• Thủ phủ Fira: Thị trấn nhộn nhịp nằm trên đỉnh cao, tràn ngập những con hẻm nhỏ lát đá, những nhà hàng lộng gió view thẳng ra miệng núi lửa chìm dưới biển.\n" +
+                    "• Bãi biển Đỏ & Biển Đen: Những bãi biển độc nhất vô nhị có cát màu đỏ rực hoặc đen tuyền do bụi tro núi lửa tạo nên.\n\n" +
+                    "Santorini là nơi lý tưởng để bạn sống chậm lại, thưởng thức một ly vang trắng Assyrtiko trứ danh bên ban công, lộng gió biển và ngắm nhìn đại dương bao la vô tận!";
+        }
+
+        if (name.contains("amsterdam")) {
+            return "Amsterdam – Thủ đô của Vương quốc Hà Lan, được mệnh danh là 'Venice của phương Bắc' nhờ hệ thống kênh đào chằng chịt, cổ kính đã được UNESCO công nhận là Di sản thế giới.\n\n" +
+                    "🚲 LỊCH SỬ VÀ PHONG CÁCH SỐNG ĐỘC ĐÁO:\n" +
+                    "Xuất phát từ một làng chài nhỏ vào thế kỷ 13, Amsterdam vươn lên thành một trong những thương cảng quan trọng nhất thế giới trong 'Kỷ nguyên Vàng' của Hà Lan. Thành phố này nổi tiếng toàn cầu bởi tinh thần tự do, phóng khoáng, và là thủ đô của văn hóa đi xe đạp với số lượng xe đạp còn nhiều hơn cả số dân!\n\n" +
+                    "✨ NHỮNG TRẢI NGHIỆM ĐÁNG GIÁ KHÔNG THỂ KHÔNG THỬ:\n" +
+                    "• Hệ thống kênh đào biểu tượng: Ngồi thuyền mui trần len lỏi qua các dòng kênh, ngắm nhìn những ngôi nhà gạch cao gầy có kiến trúc độc đáo từ thế kỷ 17.\n" +
+                    "• Quảng trường Museumplein: Nơi tập trung những bảo tàng lớn nhất thế giới như Bảo tàng Van Gogh và Bảo tàng Rijksmuseum, lưu giữ các kiệt tác hội họa kinh điển.\n" +
+                    "• Cánh đồng hoa Tulip Keukenhof (gần thành phố): Thiên đường hoa rực rỡ sắc màu, mở ra bức tranh thiên nhiên tuyệt mỹ mỗi độ xuân về.\n\n" +
+                    "Một chuyến đi dạo qua những cây cầu cổ lãng mạn rực rỡ ánh đèn vào ban đêm sẽ khiến bất kỳ trái tim du khách nào cũng phải thổn thức!";
+        }
+
+        if (name.contains("barcelona")) {
+            return "Barcelona – Thủ đô của xứ Catalonia, Tây Ban Nha, là một thành phố biển rực rỡ ánh nắng, tràn đầy năng lượng và là cái nôi của những công trình kiến trúc kỳ dị, vĩ đại bậc nhất nhân loại.\n\n" +
+                    "🎨 THÀNH PHỐ CỦA THIÊN TÀI ANTONI GAUDÍ:\n" +
+                    "Không một thành phố nào trên thế giới lại mang đậm dấu ấn cá nhân của một kiến trúc sư như Barcelona với Antoni Gaudí. Đi bộ trong thành phố, bạn sẽ ngỡ ngàng trước những tòa nhà không có đường thẳng, mô phỏng hình dáng của thiên nhiên hoang dã, tạo nên một bảo tàng kiến trúc ngoài trời khổng lồ.\n\n" +
+                    "✨ ĐIỂM ĐẾN GÂY ẤN TƯỢNG MẠNH:\n" +
+                    "• Vương cung thánh đường Sagrada Família: Kiệt tác thế kỷ chưa hoàn thành của Gaudí, sở hữu những cột trụ như rừng cây cổ thụ và hệ thống kính màu đón ánh sáng đẹp như cõi mơ.\n" +
+                    "• Công viên Guell: Khu vườn cổ tích rực rỡ với những bức tranh khảm gốm đầy màu sắc, ngắm trọn vẹn biển Địa Trung Hải.\n" +
+                    "• Đại lộ sôi động Las Ramblas: Trái tim của thành phố với các nghệ sĩ đường phố, chợ ẩm thực La Boqueria tràn ngập món ăn ngon hải sản và đùi lợn muối Iberico.\n\n" +
+                    "Barcelona hứa hẹn đem đến cho bạn một kỳ nghỉ cuồng nhiệt, say đắm trong tiếng nhạc Flamenco và vị ngon của những ly rượu Sangria mát lạnh!";
+        }
+
+        if (name.contains("amalfi")) {
+            return "Biển Amalfi (Amalfi Coast) – Dải bờ biển miền Nam nước Ý, được ca ngợi là một trong những cung đường ven biển ngoạn mục và quyến rũ nhất trên thế giới, được UNESCO vinh danh là kiệt tác cảnh quan thế giới.\n\n" +
+                    "🍋 THIÊN ĐƯỜNG VÁCH ĐÁ ĐỊA TRUNG HẢI:\n" +
+                    "Nơi đây sở hữu địa hình cực kỳ hiểm trở nhưng lại mang vẻ đẹp nghẹt thở: những thị trấn cổ kính với những ngôi nhà màu pastel rực rỡ nằm chồng chồng lớp lớp lên nhau dọc theo vách đá dựng đứng, hướng thẳng ra làn nước biển xanh trong vắt như ngọc bích.\n\n" +
+                    "✨ TRẢI NGHIỆM HOÀN HẢO TẠI AMALFI:\n" +
+                    "• Thị trấn Positano: Viên ngọc sáng nhất Amalfi, nơi có những bậc thang dốc uốn lượn, những giàn hoa giấy hồng rực rỡ bao phủ các lối đi nhỏ dẫn xuống bãi biển.\n" +
+                    "• Thị trấn Amalfi lịch sử: Từng là một trong bốn cộng hòa hàng hải hùng mạnh của Ý, nổi bật với nhà thờ chính tòa Duomo mang phong cách kiến trúc Moorish cổ kính.\n" +
+                    "• Hương vị chanh vàng bản địa: Vùng đất của những vườn chanh khổng lồ, nơi sản xuất ra loại rượu chanh Limoncello thơm lừng nổi tiếng khắp hành tinh.\n" +
+                    "Cảm giác được lái xe men theo những khúc cua lộng gió, ngắm biển xanh thẳm một bên và vách đá hùng vĩ một bên chính là trải nghiệm đỉnh cao của cuộc đời!";
+        }
+
+        if (name.contains("geneva")) {
+            return "Hồ Geneva (Lac Léman) – Viên ngọc xanh tuyệt mỹ nằm giữa biên giới hai nước Thụy Sĩ và Pháp, là một trong những hồ nước ngọt lớn nhất Tây Âu, nằm bình yên dưới chân dãy núi Alps hùng vĩ.\n\n" +
+                    "🏔️ SỰ GIAO THOA GIỮA THIÊN NHIÊN VÀ SỰ SANG TRỌNG:\n" +
+                    "Vùng hồ Geneva là biểu tượng của cuộc sống thanh bình, đẳng cấp và giàu có. Mặt hồ phẳng lặng như gương phản chiếu đỉnh núi tuyết trắng xóa, bao quanh là các thành phố quốc tế hiện đại, các thị trấn nghỉ dưỡng lãng mạn và những đồi chè xanh mướt trải dài.\n\n" +
+                    "✨ NHỮNG ĐIỂM SÁNG LÀM SAY ĐẮM LÒNG NGƯỜI:\n" +
+                    "• Đài phun nước Jet d'Eau: Biểu tượng của thành phố Geneva, phun cột nước khổng lồ cao tới 140m lên không trung, tạo nên cầu vồng rực rỡ dưới ánh nắng.\n" +
+                    "• Lâu đài Chillon (Montreux): Lâu đài cổ kính hơn 1.000 năm tuổi nằm soi bóng ngay bên vách đá sát mặt nước hồ, trông như bước ra từ truyện cổ tích.\n" +
+                    "• Thị trấn Montreux: Nơi ngập tràn hoa tươi dọc bờ hồ, nổi tiếng với khí hậu ôn hòa và là nguồn cảm hứng của rất nhiều nghệ sĩ vĩ đại.\n\n" +
+                    "Hãy thử một lần ngồi trên du thuyền hơi nước cổ hoài niệm, ngắm hoàng hôn buông xuống đỉnh núi tuyết, bạn sẽ hiểu thế nào là thiên đường nơi hạ giới!";
+        }
+
+        if (name.contains("ibiza")) {
+            return "Ibiza – Hòn đảo huyền thoại thuộc quần đảo Baleares của Tây Ban Nha, nổi tiếng khắp thế giới như thủ đô tiệc tùng của nhân loại nhưng đồng thời cũng ẩn chứa vẻ đẹp thiên nhiên hoang sơ thanh bình kỳ diệu.\n\n" +
+                    "🌟 SỰ KẾT HỢP GIỮA CUỒNG NHIỆT VÀ BÌNH YÊN:\n" +
+                    "Ibiza mang hai bộ mặt hoàn toàn đối lập nhưng đều mê hoặc. Một bên là thiên đường giải trí sôi động ban đêm với các câu lạc bộ bãi biển đẳng cấp, nơi tụ họp của các DJ hàng đầu thế giới. Một bên là khu phố cổ Dalt Vila cổ kính được UNESCO công nhận là Di sản thế giới, với những bức tường thành vững chãi bảo vệ hòn đảo khỏi cướp biển ngày xưa.\n\n" +
+                    "✨ TRẢI NGHIỆM ĐỘC QUYỀN TẠI IBIZA:\n" +
+                    "• Các vịnh biển bí ẩn (Calas): Như Cala Comte, Cala Salada với làn nước biển màu ngọc lục bảo trong suốt đến mức nhìn thấy đáy cát trắng.\n" +
+                    "• Chợ Bohemian (Hippie Markets): Nơi lưu giữ văn hóa tự do từ thập niên 1960 với trang phục, đồ thủ công mỹ nghệ độc lạ.\n" +
+                    "• Hoàng hôn tại Café del Mar: Vừa nghe nhạc chillout vừa ngắm mặt trời đỏ rực chìm dần xuống biển sâu.\n\n" +
+                    "Ibiza không chỉ là một điểm đến, đó là một phong cách sống tự do phóng khoáng đỉnh cao mà ai cũng nên trải nghiệm một lần!";
+        }
+
+        if (name.contains("mont blanc") || name.contains("blanc")) {
+            return "Mont Blanc (Đỉnh Núi Trắng) – Nóc nhà của Tây Âu, ngọn núi cao nhất thuộc dãy Alps sừng sững nằm giữa biên giới Pháp và Ý, là mục tiêu tối thượng của những nhà leo núi và những người yêu thiên nhiên hoang dã vĩ đại.\n\n" +
+                    "❄️ SỰ HÙNG VĨ TỐI CAO CỦA THIÊN NHIÊN:\n" +
+                    "Với độ cao vách núi lên tới 4.805 mét, Mont Blanc quanh năm bao phủ bởi lớp băng tuyết vĩnh cửu trắng xóa, những dòng sông băng khổng lồ uốn lượn tạo nên một cảnh quan kỳ vĩ, tráng lệ đến nghẹt thở.\n\n" +
+                    "✨ NHỮNG TRẢI NGHIỆM ĐỈNH CAO:\n" +
+                    "• Thung lũng Chamonix (Pháp): Thị trấn núi xinh đẹp nằm ngay dưới chân núi, trung tâm của các trò chơi mạo hiểm, trượt tiện đẳng cấp thế giới.\n" +
+                    "• Cáp treo Aiguille du Midi: Hệ thống cáp treo kỷ lục đưa bạn lên độ cao 3.842m chỉ trong vài phút. Tại đây, bạn có thể trải nghiệm bước chân vào lồng kính 'Bước vào khoảng không' nhìn xuống vực sâu thẳm dưới chân.\n" +
+                    "• Tàu hỏa bánh răng Montenvers: Đưa du khách đến tham quan Hang động băng (Ice Cave) được đào xuyên lòng dòng sông băng Mer de Glace rực rỡ ánh sáng xanh.\n\n" +
+                    "Đứng trước sự vĩ đại của Mont Blanc, bạn sẽ cảm thấy tâm hồn mình trở nên rộng mở và hoàn toàn choáng ngợp trước bàn tay tạo hóa!";
+        }
+
+        if (name.contains("plitvice")) {
+            return "Vườn quốc gia Hồ Plitvice (Croatia) – Được mệnh danh là 'Thiên đường ngọc bích' của Châu Âu, một trong những kỳ quan thiên nhiên lâu đời và đẹp nhất thế giới được UNESCO công nhận từ năm 1979.\n\n" +
+                    "🌿 KÝ QUAN THÁC NƯỚC CHỐN BỒNG LAI:\n" +
+                    "Plitvice hớp hồn du khách bởi một hệ thống kỳ ảo gồm 16 hồ nước liên kết với nhau bằng hàng trăm thác nước lớn nhỏ tự nhiên, đổ từ trên cao xuống các thung lũng đá vôi sâu thẳm. Làn nước ở đây có màu sắc thay đổi liên tục từ xanh lá cây, xanh ngọc bích sang màu xám bạc tùy thuộc vào lượng khoáng chất và ánh nắng mặt trời.\n\n" +
+                    "✨ TRẢI NGHIỆM ĐI BỘ TRÊN NƯỚC ĐỘC ĐÁO:\n" +
+                    "• Hệ thống cầu gỗ ven bờ: Bạn sẽ được tản bộ trên những lối đi bằng gỗ được thiết kế uốn lượn ngay trên sát mặt nước hồ, đi xuyên qua làn sương mờ của các dòng thác đổ ào ạt.\n" +
+                    "• Thác nước Veliki Slap: Thác nước cao nhất công viên (78m), bọt tung trắng xóa giữa không gian rừng nguyên sinh xanh mướt.\n" +
+                    "• Ngắm động vật hoang dã: Khu rừng nguyên sinh bao bọc quanh hồ là nơi trú ẩn của nhiều loài chim quý hiếm và thảm thực vật phong phú.\n\n" +
+                    "Bước vào Plitvice giống như bạn đang lạc vào một thế giới thần tiên tách biệt hoàn toàn khỏi cuộc sống xô bồ hiện đại!";
+        }
+
+        if (name.contains("algarve")) {
+            return "Algarve – Vùng đất cực Nam đầy quyến rũ của Bồ Đào Nha, nổi tiếng thế giới bởi những bãi biển cát vàng mịn màng, những vách đá vôi màu cam rực rỡ và những hang động biển kỳ vĩ được sóng đại dương đục đẽo hàng triệu năm.\n\n" +
+                    "☀️ VÙNG BIỂN VÀNG TRÀN NGẬP ÁNH NẮNG:\n" +
+                    "Với hơn 300 ngày nắng mỗi năm và khí hậu Địa Trung Hải ấm áp quanh năm, Algarve là điểm trốn cái lạnh mùa đông yêu thích của cả Châu Âu. Nơi đây sở hữu đường bờ biển dài ngoạn mục xen lẫn những làng chài cổ kính quét vôi trắng xóa thanh bình.\n\n" +
+                    "✨ NHỮNG ĐIỂM ĐẾN ĐẮT GIÁ:\n" +
+                    "• Hang động biển Benagil: Kỳ quan thiên nhiên nổi tiếng với một vòm hang khổng lồ có 'giếng trời' tự nhiên đón ánh nắng chiếu xuống bãi cát vàng bên trong lòng hang cực kỳ kỳ ảo.\n" +
+                    "• Thị trấn Lagos lịch sử: Nơi khởi nguồn của những chuyến hải trình khám phá thế giới của các thủy thủ Bồ Đào Nha vĩ đại vào thế kỷ 15.\n" +
+                    "• Mũi đất Ponta da Piedade: Sở hữu những cột đá vôi dựng sừng sững giữa biển xanh, tạo nên những cổng vòm tự nhiên tuyệt mỹ.\n\n" +
+                    "Đến Algarve, hãy thuê một chiếc thuyền kayak nhỏ, chèo len lỏi qua các vòm đá ngầm để khám phá những bãi biển bí ẩn giấu kín trong lòng vách đá nhé!";
+        }
+
+        if (name.contains("rome")) {
+            return "Rome – Thành phố vĩnh cửu của nước Ý, nơi lưu giữ những tàn tích vĩ đại vĩnh cửu của Đế chế La Mã hùng mạnh cổ đại.\n\n" +
+                    "🏛️ ĐỀ CHẾ VÀ TÀN TÍCH CỔ ĐẠI:\n" +
+                    "Trải qua gần 3.000 năm lịch sử, Rome là một trong những cái nôi vĩ đại nhất của văn minh phương Tây. Du khách sẽ hoàn toàn bị choáng ngợp khi đứng trước Đấu trường Colosseum huyền thoại, Điện Pantheon oai nghiêm hay khu phế tích Roman Forum cổ kính.\n\n" +
+                    "✨ TRẢI NGHIỆM ĐÁNG GIÁ BẮT BUỘC:\n" +
+                    "• Đài phun nước Trevi: Kiệt tác điêu khắc Baroque, nơi du khách tung đồng xu cầu nguyện quay trở lại Rome một lần nữa.\n" +
+                    "• Tòa thánh Vatican: Quốc gia nhỏ nhất thế giới nằm trong lòng Rome, nơi sở hữu Vương cung thánh đường Thánh Peter xa hoa tuyệt đỉnh.\n" +
+                    "• Ẩm thực Rome: Thưởng thức đĩa mì Ý Carbonara đúng điệu kết hợp một ly kem Gelato truyền thống mát lạnh.\n\n" +
+                    "Mỗi bước chân tại Rome là một bước chạm vào các trang sử sách vĩ đại kinh điển của nhân loại!";
+        }
+
+        if (name.contains("venice")) {
+            return "Venice – Thành phố của những con kênh lãng mạn bậc nhất thế giới, kỳ quan kiến trúc nổi trên mặt biển Địa Trung Hải độc nhất vô nhị.\n\n" +
+                    "🎭 THÀNH PHỐ KHÔNG TIẾNG ĐỘNG CƠ XE:\n" +
+                    "Venice được xây dựng trên 118 hòn đảo nhỏ kết nối bởi hơn 400 cây cầu cổ kính. Tại đây, hoàn toàn không có ô tô hay xe máy, mọi hoạt động di chuyển đều diễn ra trên những dòng kênh xanh biếc bằng những chiếc thuyền Gondola truyền thống kiêu sa.\n\n" +
+                    "✨ TRẢI NGHIỆM ĐỘC QUYỀN MÊ HOẶC:\n" +
+                    "• Quảng trường Thánh Mark: Trái tim của Venice với Vương cung thánh đường mang kiến trúc Byzantine vàng rực và Dinh Tổng trấn tráng lệ.\n" +
+                    "• Cầu Rialto cổ xưa: Cây cầu đá lâu đời và đẹp nhất bắc qua dòng Kênh Lớn (Grand Canal) sầm uất tấp nập thuyền bè.\n" +
+                    "• Đảo sắc màu Burano: Hòn đảo nhỏ nổi tiếng với những ngôi nhà rực rỡ đủ sắc màu cầu vồng soi bóng xuống dòng kênh xanh phẳng lặng.\n\n" +
+                    "Ngồi trên chiếc thuyền Gondola nghe người lái thuyền cất tiếng hát ngân vang giữa những bức tường rêu phong lãng mạn vô cùng!";
+        }
+
+        if (name.contains("prague")) {
+            return "Prague – Trái tim vàng của Châu Âu, thủ đô cổ kính của Cộng hòa Séc, được mệnh danh là thành phố của trăm đỉnh tháp vàng nguy nga.\n\n" +
+                    "🏰 KHÔNG GIAN CỔ TÍCH TRUNG CỔ NGUYÊN VẸN:\n" +
+                    "May mắn không bị tàn phá trong các cuộc chiến tranh lớn, Prague giữ nguyên vẹn cấu trúc đô thị thời trung cổ huyền biến. Những con đường lát đá quanh co, những quảng trường rộng lớn mang đậm phong cách Gothic và kiến trúc Baroque quyến rũ.\n\n" +
+                    "✨ KÝ QUAN NỔI TIẾNG:\n" +
+                    "• Cầu Charles (Cầu Tình): Cây cầu đá cổ hơn 600 tuổi bắc ngang sông Vltava thơ mộng, nơi đặt 30 bức tượng thánh cổ kính vĩ đại.\n" +
+                    "• Lâu đài Prague: Quần thể lâu đài cổ rộng lớn nhất thế giới nằm kiêu hãnh trên đỉnh đồi, nhìn xuống toàn cảnh mái ngói đỏ rực.\n" +
+                    "• Đồng hồ thiên văn Orloj: Kiệt tác cơ khí thế kỷ 14 tại quảng trường cổ, cứ mỗi giờ lại có màn trình diễn chuyển động độc đáo.\n\n" +
+                    "Prague mang một vẻ đẹp bí ẩn, ma mị đặc biệt rực rỡ lộng lẫy khi ánh đèn đêm buông xuống phủ vàng lên những đỉnh tháp!";
+        }
+
+        if (name.contains("vienna")) {
+            return "Vienna – Thủ đô âm nhạc cổ điển huyền thoại của thế giới, thành phố đáng sống nhất nước Áo mang đậm phong cách quý tộc sang trọng.\n\n" +
+                    "🎵 CÁI NÔI CỦA THIÊN TÀI ÂM NHẠC:\n" +
+                    "Vienna là nơi gắn liền với cuộc đời và sự nghiệp vĩ đại của các nhà soạn nhạc thiên tài như Mozart, Beethoven hay Strauss. Thành phố mang bầu không khí nghệ thuật thượng lưu đỉnh cao bao phủ khắp các nhà hát opera lộng lẫy và các đại lộ thênh thang.\n\n" +
+                    "✨ KIỆT TÁC HOÀNG GIA XA HOA:\n" +
+                    "• Cung điện Schönbrunn: Nơi nghỉ hè của hoàng gia Habsburg với khu vườn mê cung khổng lồ mang kiến trúc Baroque tuyệt mỹ.\n" +
+                    "• Cung điện Hofburg: Trung tâm quyền lực mùa đông lộng lẫy, nơi lưu giữ kho báu hoàng gia vô giá.\n" +
+                    "• Văn hóa cà phê Vienna: Thưởng thức ly cà phê Melange đậm đà cùng miếng bánh ngọt Sacher trứ danh trong không gian âm nhạc du dương.\n\n" +
+                    "Vienna đem lại cho du khách một cảm giác yên bình, đẳng cấp quý tộc hoàng gia sâu sắc khó tìm thấy ở nơi nào khác!";
+        }
+
+        if (name.contains("florence")) {
+            return "Florence – Cội nguồn của phong trào Văn hóa Phục Hưng vĩ đại, trung tâm nghệ thuật vĩnh cửu nằm giữa thung lũng vùng Tuscany nước Ý.\n\n" +
+                    "🎨 BẢO TÀNG NGHỆ THUẬT LỘ THIÊN VĨ ĐẠI:\n" +
+                    "Florence là quê hương của những vĩ nhân làm thay đổi lịch sử nghệ thuật nhân loại như Leonardo da Vinci, Michelangelo hay Dante. Thành phố nhỏ nhắn này chứa đựng một mật độ di sản và tác phẩm nghệ thuật kinh điển khổng lồ.\n\n" +
+                    "✨ ĐIỂM SÁNG KHÔNG THỂ BỎ QUA:\n" +
+                    "• Nhà thờ chính tòa Duomo (Santa Maria del Fiore): Kỳ quan sở hữu mái vòm bằng gạch đỏ khổng lồ lớn nhất thế giới của Brunelleschi.\n" +
+                    "• Cầu Ponte Vecchio: Cây cầu đá cổ uốn lượn qua sông Arno, nơi mọc lên những cửa hàng kim hoàn lấp lánh có lịch sử hàng trăm năm.\n" +
+                    "• Bảo tàng Uffizi: Nơi lưu giữ những bức họa kinh điển như 'Sự ra đời của thần Vệ Nữ' cùng vô số kiệt tác điêu khắc vô giá.\n\n" +
+                    "Florence mang một vẻ đẹp lãng mạn trầm mặc cổ kính, làm say đắm bất kỳ tâm hồn yêu nghệ thuật và cái đẹp nào!";
+        }
+
+        if (name.contains("budapest")) {
+            return "Budapest – Viên ngọc bích lộng lẫy bên dòng sông Danube xanh, thủ đô kiêu hãnh của đất nước Hungary cổ kính.\n\n" +
+                    "🌊 SỰ GIAO THOA QUYẾN RŨ BÊN DÒNG SÔNG:\n" +
+                    "Thành phố được chia làm hai phần rõ rệt bởi dòng sông Danube: vùng Buda cổ kính yên bình trên đồi cao và vùng Pest hiện đại sôi động bên bằng phẳng, tạo nên một cảnh quan đô thị đối lập hài hòa tuyệt diệu.\n\n" +
+                    "✨ KÝ QUAN KIẾN TRÚC ĐỈNH CAO:\n" +
+                    "• Tòa nhà Quốc hội Hungary: Kiệt tác kiến trúc Gothic khổng lồ soi bóng lung linh rực rỡ ánh vàng xuống dòng sông Danube ban đêm.\n" +
+                    "• Pháo đài Fisherman: Công trình có kiến trúc như lâu đài cổ tích, nơi ngắm toàn cảnh thành phố đẹp nhất.\n" +
+                    "• Nhà tắm khoáng nóng Széchenyi: Trải nghiệm thư giãn ngâm mình trong hồ khoáng nóng tự nhiên giữa cung điện Baroque xa hoa.\n\n" +
+                    "Một chuyến du thuyền trên sông Danube ngắm hoàng hôn buông xuống Budapest chắc chắn sẽ ghi dấu ấn sâu đậm trong tim bạn!";
+        }
+
+        if (name.contains("berlin")) {
+            return "Berlin – Thủ đô lịch sử, văn hóa và sáng tạo bùng nổ của nước Đức, biểu tượng của sự kiên cường tái sinh mạnh mẽ sau thăng trầm.\n\n" +
+                    "⛓️ CHỨNG TÍCH LỊCH SỬ VÀ SỰ ĐỔI MỚI:\n" +
+                    "Từng là tâm điểm của những cuộc chiến tranh thế giới và sự chia cắt thời Chiến tranh Lạnh, Berlin ngày nay đã vươn mình trở thành một trung tâm văn hóa nghệ thuật đương đại, khởi nghiệp phóng khoáng tự do hàng đầu Châu Âu.\n\n" +
+                    "✨ ĐIỂM ĐẾN MANG ĐẬM DẤU ẤN:\n" +
+                    "• Cổng thành Brandenburg: Biểu tượng vĩnh cửu của sự thống nhất nước Đức, công trình kiến trúc tân cổ điển oai nghiêm.\n" +
+                    "• Bức tường Berlin (East Side Gallery): Đoạn tường còn sót lại được biến thành phòng tranh ngoài trời dài nhất thế giới đầy màu sắc.\n" +
+                    "• Đảo Bảo Tàng (Museum Island): Quần thể 5 bảo tàng tầm cỡ quốc tế được UNESCO công nhận di sản thế giới lưu giữ cổ vật quý hiếm.\n" +
+                    "• Đời sống Berlin: Tinh thần phóng khoáng tự do tràn ngập qua các quán cà phê ngập tràn graffiti nghệ thuật đường phố sôi động.\n\n" +
+                    "Berlin đem lại một chiều sâu lịch sử sâu sắc kết hợp nhịp đập tương lai trẻ trung đầy cuốn hút!";
+        }
+
+        if (name.contains("munich")) {
+            return "Munich – Trái tim phồn vinh của vùng Bavaria nước Đức, nơi bản sắc truyền thống lâu đời kết hợp hoàn hảo cùng sự phát triển công nghệ đỉnh cao.\n\n" +
+                    "🍺 THỦ ĐÔ CỦA LỄ HỘI BIA VÀ LÂU ĐÀI CỔ TÍCH:\n" +
+                    "Munich nổi tiếng toàn cầu với lễ hội bia Oktoberfest cuồng nhiệt thu hút hàng triệu du khách, và là cửa ngõ dẫn lối đến những lâu đài cổ tích lộng lẫy ẩn hiện giữa núi rừng thung lũng Alps.\n\n" +
+                    "✨ TRẢI NGHIỆM ĐỈNH CAO TẠI MUNICH:\n" +
+                    "• Quảng trường Marienplatz: Trung tâm thành phố với Tòa thị chính cổ kính sở hữu tháp đồng hồ Glockenspiel trình diễn độc đáo.\n" +
+                    "• Lâu đài Neuschwanstein (gần thành phố): Nguyên mẫu của lâu đài Cinderella trong hoạt hình Disney nằm cheo leo trên vách núi tuyệt mỹ.\n" +
+                    "• Khu vườn tiếng Anh (Englischer Garten): Công viên đô thị khổng lồ, nơi bạn có thể ngắm người dân lướt sóng trên dòng sông nhân tạo uốn lượn.\n\n" +
+                    "Hãy thưởng thức một ly bia đại mạch Đức hảo hạng cùng chiếc bánh mì vòng Pretzel khổng lồ để cảm nhận sự sảng khoái đích thực!";
+        }
+
+        if (name.contains("vatican")) {
+            return "Vatican – Quốc gia độc lập nhỏ nhất thế giới nằm bình yên trong lòng thủ đô Rome của Ý, trung tâm thiêng liêng tối cao của Giáo hội Công giáo.\n\n" +
+                    "🇻🇦 QUỐC GIA NHỎ BÉ MANG DI SẢN KHỔNG LỒ:\n" +
+                    "Dù có diện tích chưa đầy 0.5 km2, Vatican sở hữu những kho tàng kiến trúc, điêu khắc và hội họa vĩ đại nhất của nhân loại thời kỳ Phục Hưng được bảo tồn nghiêm ngặt qua nhiều thế kỷ.\n\n" +
+                    "✨ KIỆT TÁC TÔN GIÁO VÀ NGHỆ THUẬT:\n" +
+                    "• Vương cung thánh đường Thánh Peter: Nhà thờ lớn và lộng lẫy nhất thế giới, nơi sở hữu mái vòm cao vút và bức tượng điêu khắc Pieta bất hủ của Michelangelo.\n" +
+                    "• Hệ thống Bảo tàng Vatican: Nơi lưu giữ hàng vạn hiện vật nghệ thuật cổ đại đắt giá do các Giáo hoàng sưu tập qua nhiều thời kỳ.\n" +
+                    "• Nhà nguyện Sistine: Nơi chiêm ngưỡng kiệt tác tranh trần nhà 'Sáng thế ký' và 'Sự phán xét cuối cùng' vĩ đại của thiên tài Michelangelo.\n\n" +
+                    "Đặt chân đến Vatican mang lại một cảm giác trang nghiêm, thành kính và choáng ngợp trước đỉnh cao sáng tạo nghệ thuật nhân loại!";
+        }
+
+        return "Chào mừng bạn đến với " + tenDiaDiem + " – một trong những mảnh đất quyến rũ, thơ mộng và mang đậm bản sắc văn hóa lâu đời nhất của Châu Âu cổ kính!\n\n" +
+                "🌟 DẤU ẤN LỊCH SỬ & VĂN HÓA LÂU ĐỜI:\n" +
+                "Nơi đây tự hào lưu giữ những giá trị văn hóa vô giá truyền lại qua nhiều thế kỷ, đan xen hoàn hảo giữa nét kiến trúc cổ kính tráng lệ của các công trình di sản và nhịp sống đô thị vô cùng văn minh, hiện đại. Từng viên gạch lát đường, từng quảng trường rực rỡ ánh đèn hay những con hẻm nhỏ rợp bóng hoa đều ẩn chứa một câu chuyện lịch sử hào hùng đang chờ bạn khám phá.\n\n" +
+                "✨ NHỮNG TRẢI NGHIỆM ĐỘC QUYỀN KHÔNG THỂ BỎ LỠ:\n" +
+                "• Tản bộ khám phá các khu phố cổ và công trình kiến trúc biểu tượng mang tính lịch sử vĩ đại.\n" +
+                "• Đắm chìm trong cảnh sắc thiên nhiên tuyệt mỹ, đón ánh bình minh rực rỡ bên khung cửa hay ngắm hoàng hôn lãng mạn buông xuống.\n" +
+                "• Thưởng thức nền ẩm thực bản địa tinh tế, phong phú cùng sự đón tiếp nồng hậu, hiếu khách tuyệt vời của người dân địa phương.\n\n" +
+                "Hãy tạm gác lại mọi lo toan bộn bề của cuộc sống, xách ba lô lên và sẵn sàng cho một hành trình khám phá bùng nổ cảm xúc, ghi dấu những kỷ niệm không thể nào quên tại " + tenDiaDiem + "!";
+    }
+
+    private void CaiDatSuKienTab() {
+        HienThiTab(1);
+
+        txtTabOverview.setOnClickListener(v -> HienThiTab(1));
+        txtTabPhotos.setOnClickListener(v -> HienThiTab(2));
+        txtTabDetails.setOnClickListener(v -> HienThiTab(3));
+        txtTabReviews.setOnClickListener(v -> HienThiTab(4));
+    }
+
+    private void HienThiTab(int tabIndex) {
+        txtTabOverview.setTextColor(Color.parseColor("#A0A0A0"));
+        txtTabPhotos.setTextColor(Color.parseColor("#A0A0A0"));
+        txtTabDetails.setTextColor(Color.parseColor("#A0A0A0"));
+        txtTabReviews.setTextColor(Color.parseColor("#A0A0A0"));
 
         layoutOverviewContent.setVisibility(View.GONE);
         rvPhotos.setVisibility(View.GONE);
         layoutDetailsContent.setVisibility(View.GONE);
         layoutReviewsContent.setVisibility(View.GONE);
 
-        if (viTri == 1) {
-            txtTabOverview.setTypeface(null, Typeface.BOLD);
+        if (tabIndex == 1) {
             txtTabOverview.setTextColor(Color.parseColor("#1E2333"));
-            indicatorOverview.setVisibility(View.VISIBLE);
             layoutOverviewContent.setVisibility(View.VISIBLE);
-        } else if (viTri == 2) {
-            txtTabPhotos.setTypeface(null, Typeface.BOLD);
+        } else if (tabIndex == 2) {
             txtTabPhotos.setTextColor(Color.parseColor("#1E2333"));
             rvPhotos.setVisibility(View.VISIBLE);
-        } else if (viTri == 3) {
-            txtTabDetails.setTypeface(null, Typeface.BOLD);
+        } else if (tabIndex == 3) {
             txtTabDetails.setTextColor(Color.parseColor("#1E2333"));
             layoutDetailsContent.setVisibility(View.VISIBLE);
-        } else if (viTri == 4) {
-            txtTabReviews.setTypeface(null, Typeface.BOLD);
+        } else if (tabIndex == 4) {
             txtTabReviews.setTextColor(Color.parseColor("#1E2333"));
             layoutReviewsContent.setVisibility(View.VISIBLE);
         }
     }
 
-    private void napDuLieuNộiDungĐộng(String tenDiaDiem) {
-        if (tenDiaDiem == null) return;
-        String ten = tenDiaDiem.toLowerCase().trim();
+    private void AnhXa() {
+        rvPhotos = findViewById(R.id.rvPhotos);
+        layoutOverviewContent = findViewById(R.id.layoutOverviewContent);
+        layoutDetailsContent = findViewById(R.id.layoutDetailsContent);
+        layoutReviewsContent = findViewById(R.id.layoutReviewsContent);
 
-        if (ten.contains("paris") || ten.contains("pháp")) {
-            txtDetailsText.setText(
-                    "Kinh đô Ánh sáng Paris không chỉ là một điểm đến trên bản đồ, mà là cả một giấc mơ xa hoa mà ai cũng khao khát được chạm tay vào một lần trong đời. Nơi đây là cái nôi của tình yêu, nghệ thuật thời trang và những tinh hoa ẩm thực đỉnh cao bậc nhất thế giới.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Tháp Eiffel: Biểu tượng kiêu hãnh vươn mình giữa nền trời. Hãy đến đây vào buổi tối để chiêm ngưỡng màn trình diễn ánh sáng lung linh.\n" +
-                            "• Bảo tàng Louvre: Nơi lưu giữ hàng vạn kiệt tác nhân loại, trong đó có bức tranh nàng Mona Lisa huyền thoại.\n" +
-                            "• Đại lộ Champs-Élysées & Khải Hoàn Môn: Trục đường sang trọng bậc nhất, thiên đường của các tín đồ thời trang xa si.\n" +
-                            "• Đồi Montmartre: Ngôi làng nghệ sĩ cổ kính với thánh đường Sacré-Cœur trắng muốt.\n\n" +
-                            "Hãy tưởng tượng một buổi chiều hoàng hôn buông xuống, bạn ngồi tại một quán cà phê vỉa hè, nhâm nhi ly rượu vang Pháp, ngắm dòng người qua lại và cảm nhận tiếng vĩ cầm du dương vang lên từ một góc phố. Paris sẽ đánh cắp trái tim bạn theo cách ngọt ngào nhất!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Hoài Nam");
-            txtReviewContent1.setText("Đứng dưới chân tháp Eiffel ban đêm lộng lẫy kinh khủng khiếp! Cực kỳ đáng đi một lần trong đời.");
-            txtReviewUser2.setText("⭐⭐⭐⭐ Thu Thủy");
-            txtReviewContent2.setText("Bánh sừng bò ở các tiệm ven đường Paris giòn rụm, ngon hơn hẳn ăn ở Việt Nam luôn.");
-            txtReviewUser3.setText("⭐⭐⭐⭐⭐ Hoàng Long");
-            txtReviewContent3.setText("Bảo tàng Louvre siêu rộng, đi bộ rã cả chân nhưng ngắm tượng với tranh thích mê.");
-        }
-        else if (ten.contains("rome") || ten.contains("ý")) {
-            txtDetailsText.setText(
-                    "Được mệnh danh là 'Thành phố Vĩnh hằng', Rome mang trong mình dòng máu vương giả của một đế chế La Mã hùng mạnh từng thống trị thế giới. Bước đi trên những con phố đá cổ của Rome, bạn sẽ có cảm giác như đang lật mở từng trang sách lịch sử sống động bước ra từ hàng nghìn năm trước.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Đấu trường Colosseum: Kiệt tác kiến trúc cổ đại, nơi từng diễn ra những trận chiến sinh tử của các dũng sĩ giác đấu.\n" +
-                            "• Đài phun nước Trevi: Công trình điêu khắc baroque lộng lẫy. Đừng quên ném một đồng xu qua vai trái để ước hẹn ngày quay trở lại Rome!\n" +
-                            "• Đền Pantheon: Ngôi đền hơn 2.000 năm tuổi với mái vòm bê tông không cốt thép lớn nhất thế giới.\n" +
-                            "• Tòa thánh Vatican: Quốc gia nhỏ nhất thế giới, nơi sở hữu nhà nguyện Sistine với những bức bích họa vô giá.\n\n" +
-                            "Không chỉ có lịch sử, Rome còn chiêu đãi bạn bằng hương vị kem Gelato béo ngậy, những đĩa mỳ Ý Carbonara nguyên bản nồng nàn. Rome không vội được đâu, hãy đi chậm để cảm nhận vẻ đẹp vĩnh cửu này!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Quốc Bảo");
-            txtReviewContent1.setText("Đấu trường Colosseum hoành tráng đến ngạt thở. Cảm giác như nghe được tiếng reo hò lịch sử.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Minh Thư");
-            txtReviewContent2.setText("Nhớ ném đồng xu ở đài phun nước Trevi nha mọi người, đông nhưng mà đẹp và linh nghiệm lắm.");
-            txtReviewUser3.setText("⭐⭐⭐⭐ Tuấn Anh");
-            txtReviewContent3.setText("Mỳ Ý Carbonara nguyên bản ở đây béo ngậy, ăn hơi lạ miệng nhưng càng ăn càng dính.");
-        }
-        else if (ten.contains("venice")) {
-            txtDetailsText.setText(
-                    "Venice giống như một viên ngọc nổi trên mặt biển Adriatic, một thành phố kỳ diệu xây dựng trên 118 hòn đảo nhỏ và được kết nối bởi hơn 400 cây cầu. Đây là nơi duy nhất trên thế giới hoàn toàn vắng bóng tiếng động cơ ô tô, khói bụi và còi xe.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Kênh Lớn (Grand Canal): 'Đại lộ' nước sầm uất nhất Venice, hai bên bờ là những cung điện mang kiến trúc Gothic lộng lẫy.\n" +
-                            "• Quảng trường San Marco: Trái tim của Venice, nơi ngự trị của Vương cung thánh đường cổ kính.\n" +
-                            "• Cầu Rialto: Cây cầu đá cổ nhất và lãng mạn nhất bắc qua Kênh Lớn, điểm ngắm hoàng hôn buông xuống tuyệt mỹ.\n" +
-                            "• Đảo Burano: Hòn đảo rực rỡ với những ngôi nhà sơn đủ sắc màu cầu vồng như trong một câu chuyện cổ tích.\n\n" +
-                            "Trải nghiệm tuyệt vời nhất ở đây là ngồi trên chiếc thuyền Gondola truyền thống, lướt nhẹ qua những con hẻm nước nhỏ hẹp, lắng nghe người chèo thuyền hát nghêu ngao những bản tình ca Ý. Một không gian lãng mạn đến nghẹt thở!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Khánh Linh");
-            txtReviewContent1.setText("Ngồi thuyền Gondola nghe anh lái thuyền hát nghêu ngao lãng mạn dã man, như phim luôn.");
-            txtReviewUser2.setText("⭐⭐⭐⭐ Duy Bách");
-            txtReviewContent2.setText("Thành phố không có xe cộ nên đi bộ rất chill, nhưng nhớ chuẩn bị bản đồ vì hẻm nhỏ như mê cung.");
-            txtReviewUser3.setText("⭐⭐⭐⭐⭐ Ngọc Ánh");
-            txtReviewContent3.setText("Hoàng hôn buông xuống trên quảng trường San Marco đẹp đến phát khóc.");
-        }
-        else if (ten.contains("london") || ten.contains("anh")) {
-            txtDetailsText.setText(
-                    "Nằm bên bờ sông Thames thơ mộng, thủ đô London của Vương quốc Anh là sự giao thoa hoàn hảo giữa nét cổ kính, trang nghiêm của hoàng gia lâu đời và nhịp sống sôi động, hiện đại của một siêu đô thị toàn cầu.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Tháp đồng hồ Big Ben & Cung điện Westminster: Biểu tượng vĩnh cửu của nước Anh soi bóng xuống dòng sông Thames.\n" +
-                            "• Cung điện Buckingham: Nơi ở chính thức của Hoàng gia Anh. Nếu đến đúng giờ, bạn sẽ được xem lễ đổi gác của những người lính đội mũ lông gấu.\n" +
-                            "• Cầu Tháp London (Tower Bridge): Cây cầu mang kiến trúc Gothic độc đáo có thể tách đôi cho tàu lớn đi qua.\n" +
-                            "• Vòng quay London Eye: Chiêm ngưỡng toàn cảnh thành phố từ độ cao 135 mét giữa không trung.\n\n" +
-                            "Đến London, hãy thử một lần leo lên chiếc xe buýt hai tầng màu đỏ đặc trưng, thưởng thức một bữa trà chiều thanh lịch đúng điệu quý tộc Anh và ngắm nhìn sương mù bảng lảng nhẹ buông. London sang trọng và đầy mê hoặc đang chờ bạn!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐ Thùy Trang");
-            txtReviewContent1.setText("Thời tiết London đúng là hay mưa phùn thật, nhưng ngắm Big Ben mờ sương lại thấy thơ mộng.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Tiến Dũng");
-            txtReviewContent2.setText("Trải nghiệm văn hóa trà chiều chuẩn Anh Quốc cực kỳ sang chảnh và thanh tao.");
-            txtReviewUser3.setText("⭐⭐⭐⭐⭐ Bảo Trâm");
-            txtReviewContent3.setText("Cung điện Buckingham siêu lộng lẫy, may mắn xem được lễ đổi gác của lính hoàng gia.");
-        }
-        else if (ten.contains("amsterdam") || ten.contains("hà lan")) {
-            txtDetailsText.setText(
-                    "Amsterdam được trìu mến gọi là 'Venice của phương Bắc' nhờ hệ thống kênh đào chằng chịt được UNESCO công nhận là di sản thế giới. Đây là thành phố của sự tự do, của những chiếc xe đạp, những ngôi nhà gạch cổ nghiêng nghiêng và những bông hoa tulip rực rỡ.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Hệ thống kênh đào Cổ: Đi du thuyền mui trần dọc theo các con kênh để ngắm nhìn những dãy nhà hẹp độc đáo từ thế kỷ 17.\n" +
-                            "• Bảo tàng Van Gogh: Nơi lưu giữ bộ sưu tập tranh đồ sộ nhất của danh họa thiên tài Vincent van Gogh.\n" +
-                            "• Quảng trường Dam: Trái tim của thành phố, nơi tập trung Cung điện Hoàng gia và không khí đường phố náo nhiệt.\n" +
-                            "• Làng cối xay gió Zaanse Schans: Nằm ngay ngoại ô, nơi bạn có thể thấy những chiếc cối xay gió khổng lồ.\n\n" +
-                            "Không khí ở Amsterdam cực kỳ trong lành và thư thái. Hãy thuê một chiếc xe đạp, thong dong đạp qua những cây cầu ngập tràn hoa tươi, bạn sẽ hiểu vì sao người dân nơi đây lại có chỉ số hạnh phúc cao đến vậy!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Văn Hùng");
-            txtReviewContent1.setText("Thuê một chiếc xe đạp chạy vòng quanh các con kênh là trải nghiệm tuyệt vời nhất ở đây.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Thanh Thảo");
-            txtReviewContent2.setText("Người dân cực kỳ thân thiện, chợ hoa nổi rực rỡ sắc màu chụp ảnh sống ảo cháy máy.");
-            txtReviewUser3.setText("⭐⭐⭐⭐ Tấn Phát");
-            txtReviewContent3.setText("Không khí trong lành, mát mẻ, thành phố yên bình và rất văn minh.");
-        }
-        else if (ten.contains("berlin") || ten.contains("đức")) {
-            txtDetailsText.setText(
-                    "Trải qua những thăng trầm khốc liệt của lịch sử hiện đại, Berlin ngày nay đã tái sinh mạnh mẽ để trở thành biểu tượng của sự tự do, sáng tạo và nghệ thuật đường phố phóng khoáng bậc nhất châu Âu.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Cổng thành Brandenburg: Biểu tượng của sự thống nhất nước Đức, một công trình kiến trúc tân cổ điển đầy uy nghiêm.\n" +
-                            "• Bức tường Berlin (East Side Gallery): Đoạn tường còn sót lại dài 1,3km, giờ đây biến thành phòng triển lãm tranh ngoài trời lớn nhất thế giới.\n" +
-                            "• Đảo Bảo Tàng (Museum Island): Quần thể 5 bảo tàng tầm cỡ quốc tế nằm trên sông Spree.\n" +
-                            "• Tòa nhà Quốc hội Reichstag: Nổi bật với mái vòm bằng thủy tinh hiện đại.\n\n" +
-                            "Berlin quyến rũ bởi sự gai góc, sâu lắng của lịch sử xen lẫn nhịp sống ngầm (underground) sôi động. Đừng quên thử món xúc xích Currywurst và một ly bia đen Đức đúng điệu khi đến đây nhé!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Minh Quang");
-            txtReviewContent1.setText("Cổng thành Brandenburg sừng sững trông cực kỳ quyền lực, chụp ảnh ban ngày hay đêm đều đẹp.");
-            txtReviewUser2.setText("⭐⭐⭐⭐ Đức Thắng");
-            txtReviewContent2.setText("Bảo tàng Checkpoint Charlie lưu giữ lịch sử rất hay. Bạn nào mê lịch sử giống mình thì nên đi.");
-            txtReviewUser3.setText("⭐⭐⭐⭐⭐ Thu Hà");
-            txtReviewContent3.setText("Đồ ăn Đức siêu chất lượng, xúc xích Currywurst với bia đen ngon xuất sắc.");
-        }
-        else if (ten.contains("barcelona") || ten.contains("tây ban nha")) {
-            txtDetailsText.setText(
-                    "Barcelona là một bản tình ca rực rỡ của nắng vàng Địa Trung Hải, biển xanh lộng gió và những bộ óc kiến trúc 'điên rồ' nhất hành tinh. Thành phố này luôn tràn đầy năng lượng với những vũ điệu Flamenco quywyn rũ và lễ hội thâu đêm.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Vương cung thánh đường Sagrada Família: Kiệt tác vĩ đại của kiến trúc sư thiên tài Antoni Gaudí, một công trình kỳ vĩ đã xây dựng hơn 140 năm vẫn chưa hoàn thành.\n" +
-                            "• Công viên Güell: Như một thế giới siêu thực với các tòa nhà hình nấm và những dải ghế khảm gốm sắc sỡ.\n" +
-                            "• Con đường La Rambla: Đại lộ đi bộ sầm uất với các nghệ sĩ đường phố biểu diễn và chợ ẩm thực Boqueria.\n" +
-                            "• Bãi biển Barceloneta: Nơi bạn có thể phơi mình dưới nắng ấm và tận hưởng làn nước biển mát rượi.\n\n" +
-                            "Sau một ngày dài khám phá kiến trúc độc lạ, hãy tự thưởng cho mình một đĩa cơm hải sản Paella thơm nức và một ly rượu sangria mát lạnh. Barcelona chắc chắn sẽ khiến bạn không muốn về!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Hải Yến");
-            txtReviewContent1.setText("Nhà thờ Sagrada Familia nhìn bên ngoài đã choáng ngợp, vào bên trong ánh sáng kính màu chiếu xiên còn đỉnh hơn.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Công Vinh");
-            txtReviewContent2.setText("Biển Barceloneta siêu nhộn nhịp, vừa tắm biển vừa ăn cơm xiên hải sản Paella thì hết sảy.");
-            txtReviewUser3.setText("⭐⭐⭐⭐ Kim Ngân");
-            txtReviewContent3.setText("Phố đi bộ La Rambla tràn ngập năng lượng, nghệ sĩ đường phố biểu diễn vui mắt lắm.");
-        }
-        else if (ten.contains("prague") || ten.contains("séc")) {
-            txtDetailsText.setText(
-                    "Được mệnh danh là 'Thành phố Vàng' hay 'Thành phố của trăm đỉnh tháp', Prague (Praha) hiện lên như một câu chuyện cổ tích Grimm cổ kính được hiện thực hóa. Nơi đây may mắn vẹn nguyên sau những cuộc chiến tranh, giữ lại trọn vẹn nét đẹp Gothic và Baroque quý giá.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Cầu Charles (Cầu Tình): Cây cầu đá cổ từ thế kỷ 14 với 30 bức tượng thánh cổ kính. Đi bộ ở đây vào sáng sớm tinh mơ khi sương chưa tan là trải nghiệm siêu lãng mạn.\n" +
-                            "• Lâu đài Prague: Quần thể lâu đài cổ rộng lớn nhất thế giới, biểu tượng quyền lực của các vị vua xứ Bohemia.\n" +
-                            "• Đồng hồ Thiên văn (Prague Astronomical Clock): Chiếc đồng hồ cơ học cổ nhất vẫn còn hoạt động.\n" +
-                            "• Quảng trường Phố Cổ: Không gian bao la bao quanh bởi những tòa nhà mái ngói đỏ rực rỡ.\n\n" +
-                            "Prague còn nổi tiếng là nơi có bia ngon và rẻ hơn cả nước suối. Hãy gọi một chiếc bánh mì cuộn nướng lò Trdelnik ngọt ngào, thong dong dạo bước trên những con đường lát đá, bạn sẽ thấy lòng mình bình yên lạ kỳ."
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Gia Huy");
-            txtReviewContent1.setText("Cây cầu đá Charles đẹp cổ kính, đi sáng sớm vắng người ngắm bình minh siêu lãng mạn.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Phương Mai");
-            txtReviewContent2.setText("Đồng hồ thiên văn ở quảng trường cổ hoạt động mấy trăm năm rồi mà nhìn vẫn tinh xảo.");
-            txtReviewUser3.setText("⭐⭐⭐⭐ Thanh Tú");
-            txtReviewContent3.setText("Chi phí ở Prague rẻ hơn nhiều so với Tây Âu, đồ ăn ngon, bánh trdelnik ngọt thơm phức.");
-        }
-        else if (ten.contains("athens") || ten.contains("hy lạp")) {
-            txtDetailsText.setText(
-                    "Athens chính là cái nôi vĩ đại của nền văn minh phương Tây và là vùng đất của những câu chuyện thần thoại Hy Lạp kỳ vĩ. Đây là nơi bạn có thể trực tiếp chạm tay vào quá khứ, bước đi trên những khối đá cổ mà các triết gia vĩ đại như Socrates, Plato hay Aristotle từng đứng diễn thuyết.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Quần thể Acropolis: Thành trì cổ ngự trị kiêu hãnh trên đỉnh đồi đá, biểu tượng tối cao của thời kỳ hoàng kim Hy Lạp.\n" +
-                            "• Đền Parthenon: Kiệt tác kiến trúc thờ nữ thần Athena với những cột đá cẩm thạch sừng sững thách thức thời gian.\n" +
-                            "• Khu phố cổ Plaka: Nằm ngay dưới chân đồi Acropolis, rực rỡ với những ngôi nhà sơn trắng và giàn hoa giấy rủ bóng.\n" +
-                            "• Sân vận động Panathenaic: Nơi diễn ra kỳ Thế vận hội Olympic hiện đại đầu tiên vào năm 1896.\n\n" +
-                            "Hãy đến Athens để hít thở bầu không khí ngập tràn thần thoại, thưởng thức món sữa chua Hy Lạp béo ngậy kèm mật ong nguyên chất và ngắm nhìn hoàng hôn rực lửa nhuộm vàng những đống đổ nát kiêu hùng!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐ Tuấn Kiệt");
-            txtReviewContent1.setText("Leo lên đồi Acropolis nhìn ngắm đền cổ Parthenon sừng sững mới thấy khâm phục người cổ đại.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Mỹ Linh");
-            txtReviewContent2.setText("Khu phố cổ Plaka dưới chân đồi rất thơ mộng, nhà cửa sơn trắng xóa ngập tràn hoa giấy.");
-            txtReviewUser3.setText("⭐⭐⭐⭐⭐ Hoàng Hiệp");
-            txtReviewContent3.setText("Ẩm thực Hy Lạp thanh mát, sữa chua Hy Lạp xịn ăn kèm mật ong ngon nuốt lưỡi.");
-        }
-        else if (ten.contains("vienna") || ten.contains("áo")) {
-            txtDetailsText.setText(
-                    "Vienna (Viên) quyến rũ thực khách bằng một vẻ đẹp quý phái, thanh lịch tuyệt đối. Được mệnh danh là 'Thủ đô của Âm nhạc cổ điển', thành phố này là nơi nuôi dưỡng tài năng của những thiên tài bất hủ như Mozart, Beethoven hay Schubert.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Cung điện Schönbrunn: Cung điện mùa hè lộng lẫy của hoàng gia với khu vườn thượng uyển rộng lớn được cắt tỉa vô cùng tinh xảo.\n" +
-                            "• Cung điện Hofburg: Trự sở quyền lực mùa đông, nơi bạn có thể khám phá cuộc đời của Hoàng hậu Sisi xinh đẹp.\n" +
-                            "• Nhà hát Opera Quốc gia Vienna: Một trong những nhà hát opera bận rộn và danh giá nhất thế giới với kiến trúc hoành tráng.\n" +
-                            "• Nhà thờ thánh Stephen: Kiệt tác Gothic với mái ngói khảm màu sắc độc đáo, trái tim kiến trúc của Vienna.\n\n" +
-                            "Đến đây, bạn hãy chậm rãi trải nghiệm văn hóa quán cà phê biểu tượng của Vienna (được UNESCO công nhận), thưởng thức một ly cà phê Melange cùng một lát bánh chocolate Sacher-Torte huyền thoại trong tiếng nhạc không lời du dương nhé!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Bảo Long");
-            txtReviewContent1.setText("Cung điện Schönbrunn rộng lớn và hoành tráng vô cùng, khu vườn thượng uyển cắt tỉa siêu đẹp.");
-            txtReviewUser2.setText("⭐⭐⭐⭐ Hồng Nhung");
-            txtReviewContent2.setText("Vừa nhâm nhi ly cà phê Vienna vừa ăn bánh ngọt Sacher-Torte trong không gian cổ điển thật tuyệt.");
-            txtReviewUser3.setText("⭐⭐⭐⭐⭐ Anh Quân");
-            txtReviewContent3.setText("Thành phố cực kỳ sạch sẽ, thanh bình và toát lên vẻ quý phái sang trọng.");
-        }
-        else if (ten.contains("florence") || ten.contains("firenze")) {
-            txtDetailsText.setText(
-                    "Florence chính là chiếc nôi vĩ đại sinh ra phong trào Phục hưng lừng lẫy toàn cầu, nơi sản sinh ra những bộ óc thiên tài như Leonardo da Vinci hay Michelangelo. Thành phố xinh đẹp nước Ý này giống như một bảo tàng nghệ thuật khổng lồ ngoài trời.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Nhà thờ chính tòa Duomo Florence: Nổi bật với mái vòm gạch đỏ khổng lồ do kiến trúc sư Brunelleschi xây dựng.\n" +
-                            "• Cầu cổ Ponte Vecchio: Cây cầu đá bắc qua sông Arno với những cửa hàng vàng bạc, trang sức san sát nhau.\n" +
-                            "• Bảo tàng Uffizi Gallery: Nơi lưu giữ những bộ sưu tập tranh Phục Hưng vô giá bậc nhất nhân loại.\n" +
-                            "• Quảng trường Signoria: Nơi trưng bày các bức tượng điêu khắc cẩm thạch kiệt tác, bao gồm bản sao tượng chàng David.\n\n" +
-                            "Đi bộ dọc theo sông Arno lúc hoàng hôn buông xuống, ngắm nhìn ánh mặt trời nhuộm vàng chiếc cầu cổ Ponte Vecchio sẽ là khoảnh khắc lãng mạn in sâu vào tâm trí bạn mãi mãi!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Đăng Khoa");
-            txtReviewContent1.setText("Mái vòm nhà thờ Duomo to khủng khiếp, trèo lên đỉnh ngắm toàn cảnh thành phố đẹp nghẹt thở.");
-            txtReviewUser2.setText("⭐⭐⭐⭐⭐ Phương Thảo");
-            txtReviewContent2.setText("Thịt bò bít tết kiểu Florence (Bistecca alla Fiorentina) ở đây ngon mềm xuất sắc, rất đáng thử.");
-            txtReviewUser3.setText("⭐⭐⭐⭐ Tuấn Tú");
-            txtReviewContent3.setText("Nhiều bảo tàng nghệ thuật đỉnh cao, xếp hàng hơi lâu nhưng vô cùng xứng đáng.");
-        }
-        else if (ten.contains("santorini")) {
-            txtDetailsText.setText(
-                    "Santorini là hòn đảo thiên đường nổi tiếng nhất của Hy Lạp, được hình thành từ tàn tích của một ngọn núi lửa phun trào. Nơi đây hớp hồn du khách bằng sự kết hợp hoàn hảo giữa hai tông màu trắng muốt và xanh đại dương tinh khôi.\n\n" +
-                            "✨ CÁC ĐỊA ĐIỂM BẮT BUỘC PHẢI GHÉ THĂM:\n" +
-                            "• Ngôi làng Thơ mộng Oia: Nơi ngắm hoàng hôn buông xuống biển Aegean được bầu chọn là đẹp nhất trên thế giới.\n" +
-                            "• Thị trấn Fira: Thủ phủ nhộn nhịp nằm cheo leo trên vách đá dựng đứng, tràn ngập cửa hàng và quán cafe view biển.\n" +
-                            "• Bãi biển Cát Đỏ (Red Beach): Bãi biển độc đáo với vách đá và cát mang một màu đỏ rực quý hiếm.\n" +
-                            "• Các nhà thờ mái vòm xanh: Biểu tượng sống ảo huyền thoại xuất hiện trên mọi tấm bưu thiếp về Hy Lạp.\n\n" +
-                            "Santorini là nơi lý tưởng để sống chậm. Hãy tận hưởng một buổi sáng yên bình bên ban công lộng gió, ngắm nhìn biển xanh ngắt trải dài vô tận and thưởng thức một ly vang trắng đặc sản của đảo!"
-            );
-            txtReviewUser1.setText("⭐⭐⭐⭐⭐ Thúy Vy");
-            txtReviewContent1.setText("Hoàng hôn ở làng Oia đúng là danh bất hư truyền. Đẹp như một bức tranh vẽ sống động.");
-            txtReviewUser2.setText("⭐⭐⭐⭐ Minh Khuê");
-            txtReviewContent2.setText("Đường đi bậc thang dốc khá mệt nhưng bù lại góc nào chụp ảnh lên cũng sang chảnh");
-        }
+        txtTabOverview = findViewById(R.id.txtTabOverview);
+        txtTabPhotos = findViewById(R.id.txtTabPhotos);
+        txtTabDetails = findViewById(R.id.txtTabDetails);
+        txtTabReviews = findViewById(R.id.txtTabReviews);
+
+        imgChiTiet = findViewById(R.id.imgChiTiet);
+        btnBackCard = findViewById(R.id.btnBackCard);
+
+        txtTenChiTiet = findViewById(R.id.txtTenChiTiet);
+        txtGiaChiTiet = findViewById(R.id.txtGiaChiTiet);
+        txtQuocGiaChiTiet = findViewById(R.id.txtQuocGiaChiTiet);
+        txtMoTaChiTiet = findViewById(R.id.txtMoTaChiTiet);
+        txtSoSaoNhanXet = findViewById(R.id.txtSoSaoNhanXet);
+
+        txtDuration = findViewById(R.id.txtDuration);
+        txtWeather = findViewById(R.id.txtWeather);
+        txtGuide = findViewById(R.id.txtGuide);
+        txtSanBay = findViewById(R.id.txtSanBay);
+        txtKhachSan = findViewById(R.id.txtKhachSan);
+        txtDetailsText = findViewById(R.id.txtDetailsText);
+
+
+        btnFavoriteCard = findViewById(R.id.btnFavoriteCard);
+        btnWatchVideoCard = findViewById(R.id.btnSelectDays);
     }
 }

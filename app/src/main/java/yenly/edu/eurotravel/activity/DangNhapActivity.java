@@ -6,26 +6,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import yenly.edu.eurotravel.R;
 
 public class DangNhapActivity extends AppCompatActivity {
     private EditText edtEmailDangNhap, edtMatKhauDangNhap;
     private Button btnNutDangNhap;
 
-    private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dang_nhap);
 
-        mAuth = FirebaseAuth.getInstance();
         AnhXa();
 
         btnNutDangNhap.setOnClickListener(new View.OnClickListener() {
@@ -45,22 +37,10 @@ public class DangNhapActivity extends AppCompatActivity {
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, matKhau)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(DangNhapActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(DangNhapActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            String loiHeThong = task.getException() != null ? task.getException().getMessage() : "Lỗi không xác định";
-                            Toast.makeText(DangNhapActivity.this, "Thất bại: " + loiHeThong, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        Toast.makeText(DangNhapActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(DangNhapActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void AnhXa() {
