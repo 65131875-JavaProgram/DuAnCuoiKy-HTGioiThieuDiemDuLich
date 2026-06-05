@@ -43,4 +43,10 @@
 ---
 
 ## 📱 Hình Ảnh Minh Họa Giao Diện
+### 🔐 1. Phân Hệ Khởi Động & Xác Thực
+<img width="296" height="661" alt="image" src="https://github.com/user-attachments/assets/ca459891-2d81-46d4-8f06-96c72411e0ad" /><img width="293" height="659" alt="image" src="https://github.com/user-attachments/assets/30481bf0-9014-4cf2-941b-3a765ae00990" /><img width="295" height="658" alt="image" src="https://github.com/user-attachments/assets/02c9c4a0-591f-4475-9465-084717001732" />
+
+
+
+
 
