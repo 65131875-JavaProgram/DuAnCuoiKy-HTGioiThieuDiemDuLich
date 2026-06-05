@@ -44,13 +44,16 @@
 
 ## 📱 Hình Ảnh Minh Họa Giao Diện
 ### 🔐 1. Phân Hệ Khởi Động & Xác Thực
-<img width="296" height="661" alt="image" src="https://github.com/user-attachments/assets/ca459891-2d81-46d4-8f06-96c72411e0ad" /><img width="293" height="659" alt="image" src="https://github.com/user-attachments/assets/30481bf0-9014-4cf2-941b-3a765ae00990" /><img width="295" height="658" alt="image" src="https://github.com/user-attachments/assets/02c9c4a0-591f-4475-9465-084717001732" /><img width="353" height="791" alt="image" src="https://github.com/user-attachments/assets/1a843a1f-4ce7-4b14-8665-4285273c1f9b" />
+<img width="296" height="661" alt="image" src="https://github.com/user-attachments/assets/ca459891-2d81-46d4-8f06-96c72411e0ad" /><img width="293" height="659" alt="image" src="https://github.com/user-attachments/assets/30481bf0-9014-4cf2-941b-3a765ae00990" /><img width="341" height="757" alt="image" src="https://github.com/user-attachments/assets/d1f8ee59-d88f-4ab3-a31c-2186ff69c4da" /><img width="341" height="758" alt="image" src="https://github.com/user-attachments/assets/f8ee2afb-2e55-426c-bc70-83f2404a078a" />
+
 
 ### 🏔️ 2. Trung Tâm Khám Phá & Chi Tiết Lịch Trình
 <img width="350" height="789" alt="image" src="https://github.com/user-attachments/assets/c6a1922c-b1fc-4bc4-bbe9-f669f7dcef34" /><img width="354" height="786" alt="image" src="https://github.com/user-attachments/assets/17269619-1f4f-402a-b7e7-dac57f1aebff" /><img width="352" height="787" alt="image" src="https://github.com/user-attachments/assets/b727c93f-1eef-40fa-b4dd-bc409b398fe2" /><img width="351" height="788" alt="image" src="https://github.com/user-attachments/assets/54a0ede6-4665-4386-a4a9-7cdc703ff2ed" /><img width="352" height="789" alt="image" src="https://github.com/user-attachments/assets/9d896ba4-51d5-4059-bd1b-79bb35eaefb5" />
 
+
 ### 🤖 3. Phân Hệ Trợ Lý Ảo Groq AI
   <img width="350" height="789" alt="image" src="https://github.com/user-attachments/assets/6890451f-9a4f-4c23-b0b2-c1d2dc4302b4" /><img width="353" height="790" alt="image" src="https://github.com/user-attachments/assets/fca5c023-0654-4a36-8c53-3f02bb0b8218" />
+
 
 ### 📐 4. Phân hệ địa điểm yêu thích cá nhân
    <img width="348" height="787" alt="image" src="https://github.com/user-attachments/assets/9a3a830d-b801-4767-bbef-02d9c2bb1e6d" /><img width="354" height="790" alt="image" src="https://github.com/user-attachments/assets/797a8ca8-f732-4c39-9317-3e0eaa206bb3" />
