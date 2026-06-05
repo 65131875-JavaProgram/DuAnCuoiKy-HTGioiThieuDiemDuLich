@@ -1,4 +1,4 @@
-# 🌍 EuroTravel - Ứng dụng Hướng dẫn Du lịch Châu Âu
+# 🌍 EuroTravel - Ứng dụng Giới Thiệu Địa Điểm Du Lịch Châu Âu
 
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-24292E?style=for-the-badge&logo=android-studio&logoColor=3DDC84)](https://developer.android.com/studio)
 [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
@@ -8,46 +8,40 @@
 
 ---
 
-## 🚀 Tính năng nổi bật
+## 🚀 Các Tính Năng Cốt Lõi
 
-* **Khám phá Châu Âu:** Danh sách các địa danh, thành phố, quốc gia du lịch nổi tiếng tại Châu Âu với thông tin chi tiết.
-* **🤖 Thuyết Minh Viên Ảo (AI Guide):** Tính năng Chatbot thông minh tích hợp sâu mô hình ngôn ngữ lớn **Llama 3.1** (thông qua hệ thống Groq Cloud API siêu tốc).
-* **Giao diện Chat Messenger:** Trải nghiệm nhắn tin thời gian thực với AI được thiết kế dạng bong bóng chat bo tròn phân cực (Trái/Phải) tương tự Facebook Messenger.
-* **Lưu giữ ngữ cảnh:** Giữ nguyên lịch sử cuộc trò chuyện cũ khi người dùng đặt các câu hỏi tiếp theo, tự động cuộn màn hình thông minh xuống tin nhắn mới nhất.
+### 🔐 1. Đăng Nhập & Đăng Ký (Bảo mật)
+* **Tính năng:** Khởi động với màn hình chào chuyển cảnh mượt mà  cho phép người dùng đăng ký tài khoản mới hoặc đăng nhập để đồng bộ dữ liệu cá nhân.
+* **Điểm nổi bật:** Tích hợp hệ thống mã hóa xác thực của **Firebase Authentication** và lưu trữ thông tin tài khoản tự động lên **Firebase Realtime Database** theo thời gian thực.
+
+### 🏔️ 2. Khám Phá Địa Danh (Tab Explore)
+* **Tính năng:** Màn hình chính hiển thị danh sách các chuyến đi và danh lam thắng cảnh Châu Âu hot nhất hiện nay. Người dùng có thể tìm kiếm nhanh điểm đến thông qua thanh tìm kiếm thông minh.
+* **Điểm nổi bật:** Bộ lọc thời gian thực (`TextWatcher`) hoạt động siêu mượt mà, lọc dữ liệu ngay lập tức khi gõ chữ. Danh sách thẻ bài hiển thị ảnh chất lượng cao thông qua thư viện tối ưu bộ nhớ `Glide`.
+
+### 📄 3. Chi Tiết Hành Trình (Multi-Tab layout)
+* **Tính năng:** Trang hiển thị thông tin chuyên sâu của từng địa điểm với cấu trúc giao diện trượt đa tab (Overview, Photos, Details, Reviews). Cung cấp từ giá vé, số ngày đi, cho đến thông tin thời tiết, ngôn ngữ, sân bay và khách sạn.
+* **Điểm nổi bật:** Trình xem bộ sưu tập ảnh danh thắng kết hợp mô tả trực quan giúp người dùng có góc nhìn toàn diện nhất về điểm đến trước khi xách balo lên và đi.
+
+### 🤖 4. Trợ Lý Thuyết Minh Ảo (Groq AI Agent)
+* **Tính năng:** Không gian trò chuyện riêng tư giúp người dùng đặt câu hỏi, dịch thuật, lên lịch trình chi tiết từng ngày hoặc tìm hiểu sâu về văn hóa lịch sử các nước Châu Âu.
+* **Điểm nổi bật:** Kết nối trực tiếp với siêu mô hình **Llama 3.1** qua Groq Cloud API cho tốc độ phản hồi cực nhanh. Giao diện bong bóng chat trực quan, tự động ẩn bàn phím và tự động cuộn xuống tin nhắn mới nhất.
+
+### ❤️ 5. Chuyến Đi Yêu Thích (Favorite Layout)
+* **Tính năng:** Nơi lưu trữ riêng biệt các hành trình hoặc quốc gia mà người dùng đã bấm "thả tim" để tiện theo dõi lại sau này.
+* **Điểm nổi bật:** Danh sách hiển thị vuông vức, quản lý trạng thái lưu trữ gọn nhẹ thông qua mã nguồn Android Native tối ưu, không gây nặng máy hay lag ứng dụng.
+---
+
+## 🛠️ Kiến Trúc Công Nghệ & Thư Viện Sử Dụng
+
+* **Ngôn ngữ phát triển:** Java (Android SDK Native).
+* **Giao diện người dùng (UI/UX):** `NestedScrollView`, `CardView`, `RecyclerView`, `RelativeLayout`, `LinearLayout`.
+* **Thành phần kết nối Backend:** `firebase-auth`, `firebase-database`.
+* **Thư viện tương tác và nạp dữ liệu:**
+  * **Glide:** Tối ưu hóa bộ nhớ đệm, tự động kiểm tra tài nguyên hệ thống hoặc nạp ảnh từ URL đường truyền Internet.
+  * **OkHttp3:** Xử lý các yêu cầu mạng API HTTP tuần tự và bất đồng bộ.
+  * **JSON Org:** Phân tích dữ liệu cấu trúc phản hồi từ máy chủ AI..
 
 ---
 
-## 🛠️ Công nghệ & Thư viện sử dụng
+## 📱 Hình Ảnh Minh Họa Giao Diện
 
-Dự án được xây dựng thuần túy trên nền tảng Native Android:
-
-* **Ngôn ngữ lập trình:** Java
-* **Hệ quản trị giao diện:** XML Layouts (sử dụng `ConstraintLayout`, `RelativeLayout`, `ScrollView`)
-* **Kết nối mạng (Networking):** [OkHttp3](https://square.github.io/okhttp/) thực thi gửi/nhận yêu cầu mạng bất đồng bộ (Asynchronous Requests) với cấu hình Timeout tối ưu 60 giây.
-* **Xử lý dữ liệu:** `org.json` (Bóc tách dữ liệu JSON phản hồi từ AI Server).
-* **Đồ họa UI:** Tự động vẽ Dynamic Bubble Chat bằng mã Java thông qua lớp `GradientDrawable`.
-
----
-
-## 📱 Hình ảnh minh họa (Screenshots)
-
-| Giao diện Chatbot AI |
-| :---: |
-| <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=300" width="280"/> <br> *Giao diện bong bóng chat Messenger mượt mà* |
-
-*(Mẹo: Bạn có thể thay thế link ảnh phía trên bằng ảnh chụp màn hình app thực tế của bạn bằng cách tải ảnh lên thư mục `screenshots` trong chính repo này)*
-
----
-
-## ⚙️ Hướng dẫn cài đặt & Cấu hình
-
-Để chạy thử nghiệm mã nguồn này trên máy tính của bạn, hãy làm theo các bước sau:
-
-### 1. Yêu cầu hệ thống
-* Android Studio Jellyfish (hoặc phiên bản mới hơn).
-* Android SDK mã API tối thiểu 24+.
-* Thiết bị Android thật hoặc Máy ảo (Emulator) có kết nối Internet.
-
-### 2. Tải mã nguồn về máy
-```bash
-git clone [https://github.com/TÊN_TÀI_KHOẢN_CỦA_BẠN/EuroTravel.git](https://github.com/TÊN_TÀI_KHOẢN_CỦA_BẠN/EuroTravel.git)
