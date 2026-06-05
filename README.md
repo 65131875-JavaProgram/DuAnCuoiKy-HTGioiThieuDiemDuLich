@@ -9,4 +9,5 @@ Rome – Thành phố vĩnh cửu của nước Ý, nơi lưu giữ những tàn
                     "• Tòa thánh Vatican: Quốc gia nhỏ nhất thế giới với các kiệt tác nghệ thuật.\n" +
                     "• Ẩm thực Ý: Thưởng thức mì Carbonara và kem Gelato truyền thống.";
                     
-        <img width="323" height="721" alt="image" src="https://github.com/user-attachments/assets/58dd5ce3-92f4-4ef8-be70-e824d2cfdf16" />
+![Uploading image.png…]()
+
